@@ -22,6 +22,10 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+// Credenciales de prueba: todavía no hay conexión con el backend de autenticación.
+const FAKE_ADMIN_EMAIL = 'admin@perfumerie.com';
+const FAKE_ADMIN_PASSWORD = 'Admin1234';
+
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -53,7 +57,16 @@ export default function LoginScreen() {
 
   const handleSubmit = () => {
     if (!canSubmit) return;
-    setError('Tu contraseña es incorrecta o el mail no existe.');
+
+    const matches =
+      email.trim().toLowerCase() === FAKE_ADMIN_EMAIL && password === FAKE_ADMIN_PASSWORD;
+
+    if (!matches) {
+      setError('Tu contraseña es incorrecta o el mail no existe.');
+      return;
+    }
+
+    router.replace('/admin');
   };
 
   return (
@@ -139,6 +152,10 @@ export default function LoginScreen() {
               Ingresar
             </ThemedText>
           </Pressable>
+
+          <ThemedText style={styles.demoHint}>
+            Demo: {FAKE_ADMIN_EMAIL} / {FAKE_ADMIN_PASSWORD}
+          </ThemedText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -165,9 +182,9 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   card: {
-    backgroundColor: 'rgba(28,28,30,0.45)',
+    backgroundColor: 'rgba(80, 80, 85, 0.45)',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(5, 5, 5, 0.12)',
     borderRadius: 24,
     padding: 24,
   },
@@ -222,5 +239,11 @@ const styles = StyleSheet.create({
   submitText: {
     fontSize: 15,
     fontWeight: '600',
+  },
+  demoHint: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 14,
   },
 });
