@@ -18,6 +18,6 @@ export const AdminColors = {
   accent: '#192637',
   price: '#1D4E89',
   // Fondo claro de la pantalla de editar producto: mismo tono cálido que usa el chat, sin llegar a blanco puro.
-  editBackground: '#c3c3c3',
+  editBackground: '#e0e0e0',
   editTexture: 'rgba(2, 2, 2, 0.04)',
 };
