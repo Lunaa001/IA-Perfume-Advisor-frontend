@@ -15,27 +15,27 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useAuth } from '@/components/auth/auth-context';
 import { BackgroundTexture } from '@/components/chat/background-texture';
 import { HeroOverlay } from '@/components/chat/hero-overlay';
 import { TopFade } from '@/components/chat/top-fade';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-
-// Credenciales de prueba: todavía no hay conexión con el backend de autenticación.
-const FAKE_ADMIN_EMAIL = 'admin@perfumerie.com';
-const FAKE_ADMIN_PASSWORD = 'Admin1234';
+import { ApiError } from '@/lib/api';
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState('');
+  const { login } = useAuth();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const canSubmit = email.trim().length > 0 && password.length > 0;
+  const canSubmit = username.trim().length > 0 && password.length > 0 && !submitting;
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -55,18 +55,23 @@ export default function LoginScreen() {
     };
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return;
 
-    const matches =
-      email.trim().toLowerCase() === FAKE_ADMIN_EMAIL && password === FAKE_ADMIN_PASSWORD;
-
-    if (!matches) {
-      setError('Tu contraseña es incorrecta o el mail no existe.');
-      return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await login(username.trim(), password);
+      router.replace('/admin');
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        setError('Tu usuario o contraseña son incorrectos.');
+      } else {
+        setError('No se pudo conectar con el servidor. Probá de nuevo.');
+      }
+    } finally {
+      setSubmitting(false);
     }
-
-    router.replace('/admin');
   };
 
   return (
@@ -102,14 +107,13 @@ export default function LoginScreen() {
           <ThemedText style={styles.subtitle}>Ingresá tus credenciales para continuar</ThemedText>
 
           <TextInput
-            value={email}
+            value={username}
             onChangeText={(text) => {
-              setEmail(text);
+              setUsername(text);
               setError(null);
             }}
-            placeholder="Email"
+            placeholder="Usuario"
             placeholderTextColor="rgba(255,255,255,0.5)"
-            keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
             style={styles.input}
@@ -149,13 +153,9 @@ export default function LoginScreen() {
             ]}>
             <ThemedText
               style={[styles.submitText, { color: canSubmit ? '#FFFFFF' : '#5C5A57' }]}>
-              Ingresar
+              {submitting ? 'Ingresando...' : 'Ingresar'}
             </ThemedText>
           </Pressable>
-
-          <ThemedText style={styles.demoHint}>
-            Demo: {FAKE_ADMIN_EMAIL} / {FAKE_ADMIN_PASSWORD}
-          </ThemedText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -239,11 +239,5 @@ const styles = StyleSheet.create({
   submitText: {
     fontSize: 15,
     fontWeight: '600',
-  },
-  demoHint: {
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 11,
-    textAlign: 'center',
-    marginTop: 14,
   },
 });

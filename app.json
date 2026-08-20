@@ -40,7 +40,14 @@
         }
       ],
       "expo-web-browser",
-      "expo-font"
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Se usa para elegir la foto de un producto desde tu galería."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

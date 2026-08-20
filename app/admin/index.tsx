@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useAuth } from '@/components/auth/auth-context';
 import { ProductCard } from '@/components/admin/product-card';
 import { useProducts } from '@/components/admin/product-context';
 import { BackgroundTexture } from '@/components/chat/background-texture';
@@ -12,7 +13,8 @@ import { AdminColors } from '@/lib/admin-theme';
 
 export default function AdminDashboardScreen() {
   const insets = useSafeAreaInsets();
-  const { products, removeProduct } = useProducts();
+  const { products, isLoading, error, refresh, removeProduct } = useProducts();
+  const { logout } = useAuth();
   const [search, setSearch] = useState('');
   const [listVisible, setListVisible] = useState(true);
 
@@ -28,7 +30,24 @@ export default function AdminDashboardScreen() {
   const handleDelete = (id: string, name: string) => {
     Alert.alert('Eliminar producto', `¿Seguro que querés eliminar "${name}"?`, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => removeProduct(id) },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await removeProduct(id);
+          } catch (err) {
+            Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo eliminar el producto.');
+          }
+        },
+      },
+    ]);
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Cerrar sesión', '¿Seguro que querés salir?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Salir', style: 'destructive', onPress: () => logout() },
     ]);
   };
 
@@ -46,8 +65,19 @@ export default function AdminDashboardScreen() {
             {products.length} {products.length === 1 ? 'producto' : 'productos'}
           </ThemedText>
         </View>
-        <View style={styles.iconButton} />
+        <Pressable hitSlop={10} onPress={handleLogout} style={styles.iconButton}>
+          <Ionicons name="log-out-outline" size={22} color={AdminColors.textOnDark} />
+        </Pressable>
       </View>
+
+      {error && (
+        <View style={styles.errorBanner}>
+          <ThemedText style={styles.errorText}>{error}</ThemedText>
+          <Pressable onPress={refresh}>
+            <ThemedText style={styles.retryText}>Reintentar</ThemedText>
+          </Pressable>
+        </View>
+      )}
 
       <View style={styles.searchRow}>
         <View style={[styles.searchBar, { backgroundColor: AdminColors.surface, borderColor: AdminColors.border }]}>
@@ -89,6 +119,9 @@ export default function AdminDashboardScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refresh} tintColor={AdminColors.textOnDark} />
+          }
           renderItem={({ item }) => (
             <ProductCard
               product={item}
@@ -98,10 +131,16 @@ export default function AdminDashboardScreen() {
           )}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Ionicons name="flask-outline" size={28} color={AdminColors.mutedOnDark} />
-              <ThemedText style={{ color: AdminColors.mutedOnDark, marginTop: 8 }}>
-                No se encontraron productos.
-              </ThemedText>
+              {isLoading ? (
+                <ActivityIndicator color={AdminColors.textOnDark} />
+              ) : (
+                <>
+                  <Ionicons name="flask-outline" size={28} color={AdminColors.mutedOnDark} />
+                  <ThemedText style={{ color: AdminColors.mutedOnDark, marginTop: 8 }}>
+                    No se encontraron productos.
+                  </ThemedText>
+                </>
+              )}
             </View>
           }
         />
@@ -142,6 +181,28 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
     marginTop: 1,
+  },
+  errorBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 16,
+    marginTop: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(193,57,43,0.18)',
+  },
+  errorText: {
+    color: '#FFD9D5',
+    fontSize: 12,
+    flex: 1,
+    marginRight: 8,
+  },
+  retryText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
   },
   searchRow: {
     flexDirection: 'row',

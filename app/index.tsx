@@ -9,9 +9,11 @@ import { HeroLogo } from '@/components/chat/hero-logo';
 import { HeroOverlay } from '@/components/chat/hero-overlay';
 import { MessageBubble } from '@/components/chat/message-bubble';
 import { TopFade } from '@/components/chat/top-fade';
+import { TypingIndicator } from '@/components/chat/typing-indicator';
 import type { ChatMessage } from '@/components/chat/types';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { sendChatMessage } from '@/lib/chat';
 
 export default function ChatScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -23,6 +25,7 @@ export default function ChatScreen() {
   const [input, setInput] = useState('');
   const [hasUserMessaged, setHasUserMessaged] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
+  const [isWaitingReply, setIsWaitingReply] = useState(false);
   const listRef = useRef<FlatList<ChatMessage>>(null);
 
   useEffect(() => {
@@ -30,6 +33,12 @@ export default function ChatScreen() {
     const timer = setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
     return () => clearTimeout(timer);
   }, [messages]);
+
+  useEffect(() => {
+    if (!isWaitingReply) return;
+    const timer = setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
+    return () => clearTimeout(timer);
+  }, [isWaitingReply]);
 
   useEffect(() => {
     const greetings: ChatMessage[] = [
@@ -51,7 +60,7 @@ export default function ChatScreen() {
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = input.trim();
     if (!trimmed) return;
 
@@ -59,17 +68,26 @@ export default function ChatScreen() {
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setHasUserMessaged(true);
+    setIsWaitingReply(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await sendChatMessage(trimmed);
+      setMessages((prev) => [
+        ...prev,
+        { id: reply.id, role: 'assistant', text: reply.response, recommendations: reply.recommendations },
+      ]);
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
-          id: `${Date.now()}-a`,
+          id: `${Date.now()}-error`,
           role: 'assistant',
-          text: 'Esta es una respuesta de prueba: pronto voy a poder recomendarte fragancias según lo que me cuentes.',
+          text: 'No pude conectarme para responderte. Probá de nuevo en un momento.',
         },
       ]);
-    }, 700);
+    } finally {
+      setIsWaitingReply(false);
+    }
   };
 
   const screenBackground = hasUserMessaged ? colors.chatBackground : colors.background;
@@ -95,6 +113,7 @@ export default function ChatScreen() {
             hasUserMessaged ? styles.messagesContentChat : styles.messagesContentHero
           }
           showsVerticalScrollIndicator={false}
+          ListFooterComponent={isWaitingReply ? <TypingIndicator /> : null}
         />
       </View>
 

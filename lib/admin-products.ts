@@ -1,3 +1,15 @@
+import { ApiError, API_BASE_URL, apiFetch } from '@/lib/api';
+
+export type PerfumeCategory =
+  | 'FLORAL'
+  | 'FRUITY'
+  | 'ORIENTAL'
+  | 'WOODY'
+  | 'FRESH'
+  | 'CHYPRE'
+  | 'AROMATIC'
+  | 'CITRUS';
+
 export type GenderType = 'MALE' | 'FEMALE' | 'UNISEX';
 
 export type PerfumeStatus = 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED' | 'COMING_SOON';
@@ -15,16 +27,44 @@ export type AdminProduct = {
   imageUrl: string;
 };
 
-// Sugerencias iniciales; el admin puede agregar categorías propias además de estas.
-export const CATEGORY_SUGGESTIONS: string[] = [
-  'Floral',
-  'Frutal',
-  'Oriental',
-  'Amaderado',
-  'Fresco',
-  'Chipre',
-  'Aromático',
-  'Cítrico',
+type PerfumeResponse = {
+  id: number;
+  name: string;
+  brand: string;
+  description: string | null;
+  categories: string[];
+  genderType: string;
+  price: number;
+  stock: number;
+  status: string;
+  imageUrl: string | null;
+  rating: number | null;
+};
+
+function fromResponse(response: PerfumeResponse): AdminProduct {
+  return {
+    id: String(response.id),
+    name: response.name,
+    brand: response.brand,
+    description: response.description ?? '',
+    categories: response.categories ?? [],
+    genderType: response.genderType as GenderType,
+    price: response.price,
+    stock: response.stock,
+    status: response.status as PerfumeStatus,
+    imageUrl: response.imageUrl ?? '',
+  };
+}
+
+export const CATEGORY_OPTIONS: { value: PerfumeCategory; label: string }[] = [
+  { value: 'FLORAL', label: 'Floral' },
+  { value: 'FRUITY', label: 'Frutal' },
+  { value: 'ORIENTAL', label: 'Oriental' },
+  { value: 'WOODY', label: 'Amaderado' },
+  { value: 'FRESH', label: 'Fresco' },
+  { value: 'CHYPRE', label: 'Chipre' },
+  { value: 'AROMATIC', label: 'Aromático' },
+  { value: 'CITRUS', label: 'Cítrico' },
 ];
 
 export const GENDER_OPTIONS: { value: GenderType; label: string }[] = [
@@ -39,6 +79,10 @@ export const STATUS_OPTIONS: { value: PerfumeStatus; label: string; color: strin
   { value: 'COMING_SOON', label: 'Próximamente', color: '#4C7EA8' },
   { value: 'DISCONTINUED', label: 'Descontinuado', color: '#8E8C89' },
 ];
+
+export function categoryLabel(value: string) {
+  return CATEGORY_OPTIONS.find((o) => o.value === value)?.label ?? value;
+}
 
 export function genderLabel(value: GenderType) {
   return GENDER_OPTIONS.find((o) => o.value === value)?.label ?? value;
@@ -63,53 +107,67 @@ export function parsePriceInput(raw: string): number {
   return digits ? Number(digits) : 0;
 }
 
-export const MOCK_PRODUCTS: AdminProduct[] = [
-  {
-    id: '1',
-    name: "Ámbar Nocturno",
-    brand: 'L’Essence',
-    description: 'Una fragancia envolvente con notas de ámbar, vainilla y maderas cálidas, ideal para la noche.',
-    categories: ['Oriental'],
-    genderType: 'UNISEX',
-    price: 89990,
-    stock: 24,
-    status: 'AVAILABLE',
-    imageUrl: 'https://picsum.photos/seed/perfume1/300/300',
-  },
-  {
-    id: '2',
-    name: 'Jardín de Sevilla',
-    brand: 'Casa Blanca',
-    description: 'Notas frescas de azahar y cítricos españoles con un fondo floral suave.',
-    categories: ['Cítrico', 'Floral'],
-    genderType: 'FEMALE',
-    price: 64500,
-    stock: 8,
-    status: 'AVAILABLE',
-    imageUrl: 'https://picsum.photos/seed/perfume2/300/300',
-  },
-  {
-    id: '3',
-    name: 'Roble Silvestre',
-    brand: 'Norden',
-    description: 'Vetiver, cedro y un toque de tabaco. Elegancia rústica para el día a día.',
-    categories: ['Amaderado'],
-    genderType: 'MALE',
-    price: 72000,
-    stock: 0,
-    status: 'OUT_OF_STOCK',
-    imageUrl: 'https://picsum.photos/seed/perfume3/300/300',
-  },
-  {
-    id: '4',
-    name: 'Brisa de Higuera',
-    brand: 'Costa Sur',
-    description: 'Higo verde, sal marina y almizcle blanco. Fresca y luminosa.',
-    categories: ['Fresco', 'Cítrico'],
-    genderType: 'UNISEX',
-    price: 54900,
-    stock: 15,
-    status: 'COMING_SOON',
-    imageUrl: 'https://picsum.photos/seed/perfume4/300/300',
-  },
-];
+export type PerfumeDraft = Omit<AdminProduct, 'id'>;
+
+export async function fetchPerfumes(): Promise<AdminProduct[]> {
+  const data = await apiFetch<PerfumeResponse[]>('/api/perfumes');
+  return data.map(fromResponse);
+}
+
+export async function createPerfume(draft: PerfumeDraft, token: string): Promise<AdminProduct> {
+  const response = await apiFetch<PerfumeResponse>('/api/admin/perfumes', {
+    method: 'POST',
+    token,
+    body: draft,
+  });
+  return fromResponse(response);
+}
+
+export async function updatePerfume(
+  id: string,
+  draft: PerfumeDraft,
+  token: string,
+): Promise<AdminProduct> {
+  const response = await apiFetch<PerfumeResponse>(`/api/admin/perfumes/${id}`, {
+    method: 'PUT',
+    token,
+    body: draft,
+  });
+  return fromResponse(response);
+}
+
+export async function deletePerfume(id: string, token: string): Promise<void> {
+  await apiFetch<void>(`/api/admin/perfumes/${id}`, {
+    method: 'DELETE',
+    token,
+  });
+}
+
+export async function uploadPerfumeImage(
+  uri: string,
+  fileName: string,
+  mimeType: string,
+  token: string,
+): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', {
+    uri,
+    name: fileName,
+    type: mimeType,
+  } as unknown as Blob);
+
+  const response = await fetch(`${API_BASE_URL}/api/admin/perfumes/images`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : undefined;
+
+  if (!response.ok) {
+    throw new ApiError(response.status, data?.message ?? `Error ${response.status}`);
+  }
+
+  return data.url as string;
+}
