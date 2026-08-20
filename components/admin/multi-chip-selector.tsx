@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -11,9 +11,19 @@ type Props = {
   onToggle: (value: string) => void;
   onAddCustom: (label: string) => void;
   onRemove: (value: string) => void;
+  draftInputRef?: RefObject<TextInput | null>;
+  onDraftFocus?: () => void;
 };
 
-export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRemove }: Props) {
+export function MultiChipSelector({
+  options,
+  values,
+  onToggle,
+  onAddCustom,
+  onRemove,
+  draftInputRef,
+  onDraftFocus,
+}: Props) {
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState('');
 
@@ -79,11 +89,13 @@ export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRe
       {adding && (
         <View style={styles.addRow}>
           <TextInput
+            ref={draftInputRef}
             value={draft}
             onChangeText={setDraft}
             placeholder="Nueva categoría"
             placeholderTextColor={AdminColors.muted}
             autoFocus
+            onFocus={onDraftFocus}
             onSubmitEditing={confirmAdd}
             style={[
               styles.addInput,
