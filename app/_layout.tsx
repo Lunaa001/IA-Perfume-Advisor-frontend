@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
+import { AuthProvider } from '@/components/auth/auth-context';
 import { CartProvider } from '@/components/cart/cart-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -13,14 +14,16 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <CartProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="login" />
-            <Stack.Screen name="admin" />
-            <Stack.Screen name="cart" />
-          </Stack>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="login" />
+              <Stack.Screen name="admin" />
+              <Stack.Screen name="cart" />
+            </Stack>
+          </CartProvider>
+        </AuthProvider>
         <StatusBar style="auto" />
       </ThemeProvider>
     </SafeAreaProvider>

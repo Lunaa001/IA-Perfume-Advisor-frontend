@@ -24,14 +24,20 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: Props) {
       <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
       <View style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
 
-      <Image source={{ uri: item.imageUrl }} style={styles.thumb} contentFit="cover" />
+      {item.imageUrl ? (
+        <Image source={{ uri: item.imageUrl }} style={styles.thumb} contentFit="cover" />
+      ) : (
+        <View style={[styles.thumb, styles.thumbPlaceholder, { backgroundColor: `${colors.onBubbleSurface}0D` }]}>
+          <Ionicons name="image-outline" size={20} color={colors.onBubbleSurfaceMuted} />
+        </View>
+      )}
 
       <View style={styles.info}>
         <ThemedText style={[styles.name, { color: colors.onBubbleSurface }]} numberOfLines={1}>
           {item.name}
         </ThemedText>
-        <ThemedText style={[styles.brand, { color: colors.onBubbleSurfaceMuted }]} numberOfLines={1}>
-          {item.brand} · {formatARS(item.price)}
+        <ThemedText style={[styles.unitPrice, { color: colors.onBubbleSurfaceMuted }]}>
+          {formatARS(item.price)} c/u
         </ThemedText>
 
         <View style={styles.bottomRow}>
@@ -64,15 +70,19 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     borderRadius: 18,
-    padding: 12,
+    padding: 14,
     gap: 12,
     alignItems: 'flex-start',
     overflow: 'hidden',
   },
   thumb: {
-    width: 60,
-    height: 60,
+    width: 56,
+    height: 56,
     borderRadius: 12,
+  },
+  thumbPlaceholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   info: {
     flex: 1,
@@ -82,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-  brand: {
+  unitPrice: {
     fontSize: 12,
   },
   bottomRow: {
