@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useCart } from '@/components/cart/cart-context';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -14,6 +15,7 @@ export function ChatHeader() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
+  const { totalItems } = useCart();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
@@ -31,16 +33,24 @@ export function ChatHeader() {
         </ThemedText>
       </Pressable>
 
-      <Pressable
-        hitSlop={8}
-        onPress={() => Alert.alert('Carrito', 'Tu carrito todavía está vacío.')}
-        style={styles.cartBubble}>
-        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
-        <View
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
-        />
-        <Ionicons name="cart-outline" size={19} color={colors.onBubbleSurface} />
-      </Pressable>
+      <View style={styles.cartWrapper}>
+        <Pressable
+          hitSlop={8}
+          onPress={() => router.push('/cart')}
+          style={styles.cartBubble}>
+          <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+          <View
+            style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+          />
+          <Ionicons name="cart-outline" size={19} color={colors.onBubbleSurface} />
+        </Pressable>
+
+        {totalItems > 0 && (
+          <View style={styles.badge} pointerEvents="none">
+            <ThemedText style={styles.badgeText}>{totalItems > 9 ? '9+' : totalItems}</ThemedText>
+          </View>
+        )}
+      </View>
     </View>
   );
 }
@@ -72,6 +82,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0.2,
   },
+  cartWrapper: {
+    width: 38,
+    height: 38,
+  },
   cartBubble: {
     width: 38,
     height: 38,
@@ -79,5 +93,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  badge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    minWidth: 17,
+    height: 17,
+    borderRadius: 9,
+    paddingHorizontal: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E14B4B',
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    lineHeight: 12,
   },
 });

@@ -1,8 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Alert,
+  Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChipSelector } from '@/components/admin/chip-selector';
@@ -44,6 +55,37 @@ export default function ProductFormScreen() {
   });
   const [genderType, setGenderType] = useState<GenderType | null>(existing?.genderType ?? null);
   const [status, setStatus] = useState<PerfumeStatus | null>(existing?.status ?? 'AVAILABLE');
+
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollOffsetRef = useRef(0);
+  const draftInputRef = useRef<TextInput>(null);
+  const pendingDraftScrollRef = useRef(false);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const showSub = Keyboard.addListener(showEvent, (e) => {
+      if (!pendingDraftScrollRef.current) return;
+      pendingDraftScrollRef.current = false;
+      const keyboardHeight = e.endCoordinates?.height ?? 0;
+
+      requestAnimationFrame(() => {
+        draftInputRef.current?.measureInWindow((x, y, width, measuredHeight) => {
+          const windowHeight = Dimensions.get('window').height;
+          const margin = 28;
+          const desiredBottom = windowHeight - keyboardHeight - margin;
+          const overflow = y + measuredHeight - desiredBottom;
+          if (overflow > 0) {
+            scrollRef.current?.scrollTo({ y: scrollOffsetRef.current + overflow, animated: true });
+          }
+        });
+      });
+    });
+    return () => showSub.remove();
+  }, []);
+
+  const handleDraftFocus = () => {
+    pendingDraftScrollRef.current = true;
+  };
 
   const toggleCategory = (value: string) => {
     setCategories((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
@@ -127,9 +169,14 @@ export default function ProductFormScreen() {
       </View>
 
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={(e) => {
+          scrollOffsetRef.current = e.nativeEvent.contentOffset.y;
+        }}>
         <ThemedText style={[styles.label, { color: AdminColors.muted }]}>Foto del producto</ThemedText>
         {imageUrl ? (
           <Image source={{ uri: imageUrl }} style={styles.photoPreview} contentFit="cover" />
@@ -216,6 +263,8 @@ export default function ProductFormScreen() {
           onToggle={toggleCategory}
           onAddCustom={addCustomCategory}
           onRemove={removeCategoryOption}
+          draftInputRef={draftInputRef}
+          onDraftFocus={handleDraftFocus}
         />
 
         <ThemedText style={[styles.label, { color: AdminColors.muted, marginTop: 16 }]}>Género</ThemedText>
