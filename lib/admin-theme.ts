@@ -1,7 +1,7 @@
 // Paleta propia del panel de admin: fondo gris oscuro con tarjetas claras
 // y el mismo azul marino que el botón "Ingresar" del login como color de acción.
 export const AdminColors = {
-  background: '#a8a9af',
+  background: '#c3c3c3',
   gradientTop: '#fefeff',
   gradientBottom: '#8c92aa',
   texture: 'rgba(8, 8, 8, 0.04)',
@@ -18,6 +18,6 @@ export const AdminColors = {
   accent: '#192637',
   price: '#1D4E89',
   // Fondo claro de la pantalla de editar producto: mismo tono cálido que usa el chat, sin llegar a blanco puro.
-  editBackground: '#e2e3e5',
+  editBackground: '#c3c3c3',
   editTexture: 'rgba(2, 2, 2, 0.04)',
 };
