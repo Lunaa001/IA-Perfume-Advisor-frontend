@@ -1,29 +1,44 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Paleta de la marca. Tonos cálidos/neutros pensados para una perfumería boutique.
  */
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorLight = '#D4AF37';
+const tintColorDark = '#E0BA4C';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
+    text: '#1C1C1E',
+    background: '#F6F5F3',
+    chatBackground: '#D8D5CE',
+    card: '#FFFFFF',
+    border: '#E4E2DE',
+    muted: '#8E8C89',
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    icon: '#3A3A3C',
+    bubbleSurface: '#FFFFFF',
+    bubbleSurfaceOverlay: 'rgba(255,255,255,0.45)',
+    onBubbleSurface: '#1C1C1E',
+    onBubbleSurfaceMuted: '#6E6E73',
+    texture: 'rgba(0,0,0,0.05)',
+    textureOnChat: 'rgba(0,0,0,0.09)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    text: '#F3EFE9',
+    background: '#141210',
+    chatBackground: '#0E0D0B',
+    card: '#1E1B18',
+    border: '#2E2A25',
+    muted: '#A69C8E',
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    icon: '#C7BEB2',
+    bubbleSurface: '#FFFFFF',
+    bubbleSurfaceOverlay: 'rgba(255,255,255,0.45)',
+    onBubbleSurface: '#1C1C1E',
+    onBubbleSurfaceMuted: '#6E6E73',
+    texture: 'rgba(255,255,255,0.05)',
+    textureOnChat: 'rgba(255,255,255,0.09)',
   },
 };
 
