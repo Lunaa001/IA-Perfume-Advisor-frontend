@@ -1,29 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
-import { RefObject, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { AdminColors } from '@/lib/admin-theme';
 
+export type ChipOption = { value: string; label: string };
+
 type Props = {
-  options: string[];
+  options: ChipOption[];
   values: string[];
   onToggle: (value: string) => void;
   onAddCustom: (label: string) => void;
   onRemove: (value: string) => void;
-  draftInputRef?: RefObject<TextInput | null>;
-  onDraftFocus?: () => void;
 };
 
-export function MultiChipSelector({
-  options,
-  values,
-  onToggle,
-  onAddCustom,
-  onRemove,
-  draftInputRef,
-  onDraftFocus,
-}: Props) {
+export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRemove }: Props) {
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState('');
 
@@ -34,10 +26,10 @@ export function MultiChipSelector({
     setAdding(false);
   };
 
-  const handleRemove = (option: string) => {
-    Alert.alert('Eliminar categoría', `¿Eliminar la categoría "${option}"?`, [
+  const handleRemove = (option: ChipOption) => {
+    Alert.alert('Eliminar categoría', `¿Eliminar la categoría "${option.label}"?`, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => onRemove(option) },
+      { text: 'Eliminar', style: 'destructive', onPress: () => onRemove(option.value) },
     ]);
   };
 
@@ -45,10 +37,10 @@ export function MultiChipSelector({
     <View>
       <View style={styles.wrap}>
         {options.map((option) => {
-          const selected = values.includes(option);
+          const selected = values.includes(option.value);
           return (
             <View
-              key={option}
+              key={option.value}
               style={[
                 styles.chip,
                 {
@@ -56,11 +48,11 @@ export function MultiChipSelector({
                   borderColor: selected ? AdminColors.accent : AdminColors.border,
                 },
               ]}>
-              <Pressable onPress={() => onToggle(option)} style={styles.chipBody} hitSlop={4}>
+              <Pressable onPress={() => onToggle(option.value)} style={styles.chipBody} hitSlop={4}>
                 {selected && <Ionicons name="checkmark" size={13} color="#FFFFFF" style={styles.check} />}
                 <ThemedText
                   style={[styles.chipLabel, { color: selected ? '#FFFFFF' : AdminColors.muted }]}>
-                  {option}
+                  {option.label}
                 </ThemedText>
               </Pressable>
               <Pressable onPress={() => handleRemove(option)} hitSlop={8} style={styles.removeButton}>
@@ -89,13 +81,11 @@ export function MultiChipSelector({
       {adding && (
         <View style={styles.addRow}>
           <TextInput
-            ref={draftInputRef}
             value={draft}
             onChangeText={setDraft}
             placeholder="Nueva categoría"
             placeholderTextColor={AdminColors.muted}
             autoFocus
-            onFocus={onDraftFocus}
             onSubmitEditing={confirmAdd}
             style={[
               styles.addInput,

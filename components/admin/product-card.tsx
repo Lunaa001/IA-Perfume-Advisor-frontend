@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { StatusBadge } from '@/components/admin/status-badge';
 import { ThemedText } from '@/components/themed-text';
-import { AdminProduct, formatARS } from '@/lib/admin-products';
+import { AdminProduct, categoryLabel, formatARS } from '@/lib/admin-products';
 import { AdminColors } from '@/lib/admin-theme';
 
 type Props = {
@@ -31,7 +31,7 @@ export function ProductCard({ product, onPress, onDelete }: Props) {
           {product.name}
         </ThemedText>
         <ThemedText style={[styles.meta, { color: AdminColors.muted }]} numberOfLines={1}>
-          {product.brand} · {product.categories.join(', ')}
+          {product.brand} · {product.categories.map(categoryLabel).join(', ')}
         </ThemedText>
         <View style={styles.bottomRow}>
           <ThemedText style={[styles.price, { color: AdminColors.price }]}>

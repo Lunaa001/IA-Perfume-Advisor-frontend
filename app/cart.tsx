@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
-import { Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, Linking, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useCart } from '@/components/cart/cart-context';
@@ -18,17 +19,36 @@ export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
-  const { items, totalItems, totalPrice, increase, decrease, remove } = useCart();
+  const { items, totalItems, totalPrice, isLoading, error, increase, decrease, remove, checkout } = useCart();
+  const [checkingOut, setCheckingOut] = useState(false);
 
-  const handleRemove = (id: string, name: string) => {
+  const handleRemove = (perfumeId: number, name: string) => {
     Alert.alert('Quitar producto', `¿Sacar "${name}" del carrito?`, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Quitar', style: 'destructive', onPress: () => remove(id) },
+      {
+        text: 'Quitar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await remove(perfumeId);
+          } catch (err) {
+            Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo quitar el producto.');
+          }
+        },
+      },
     ]);
   };
 
-  const handleCheckout = () => {
-    Alert.alert('Pedido por WhatsApp', 'Cuando conectemos el backend, esto va a abrir WhatsApp con tu pedido.');
+  const handleCheckout = async () => {
+    setCheckingOut(true);
+    try {
+      const redirect = await checkout();
+      await Linking.openURL(redirect.whatsappUrl);
+    } catch (err) {
+      Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo generar el pedido.');
+    } finally {
+      setCheckingOut(false);
+    }
   };
 
   return (
@@ -57,7 +77,16 @@ export default function CartScreen() {
         )}
       </View>
 
-      {items.length === 0 ? (
+      {isLoading ? (
+        <View style={styles.empty}>
+          <ActivityIndicator color="#FFFFFF" />
+        </View>
+      ) : error ? (
+        <View style={styles.empty}>
+          <Ionicons name="alert-circle-outline" size={32} color="rgba(255,255,255,0.6)" />
+          <ThemedText style={styles.emptyText}>{error}</ThemedText>
+        </View>
+      ) : items.length === 0 ? (
         <View style={styles.empty}>
           <Ionicons name="cart-outline" size={32} color="rgba(255,255,255,0.6)" />
           <ThemedText style={styles.emptyText}>Tu carrito está vacío.</ThemedText>
@@ -74,15 +103,15 @@ export default function CartScreen() {
       ) : (
         <FlatList
           data={items}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => String(item.perfumeId)}
           contentContainerStyle={styles.list}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
             <CartItemRow
               item={item}
-              onIncrease={() => increase(item.id)}
-              onDecrease={() => decrease(item.id)}
-              onRemove={() => handleRemove(item.id, item.name)}
+              onIncrease={() => increase(item.perfumeId)}
+              onDecrease={() => decrease(item.perfumeId)}
+              onRemove={() => handleRemove(item.perfumeId, item.name)}
             />
           )}
         />
@@ -105,11 +134,18 @@ export default function CartScreen() {
             </View>
             <Pressable
               onPress={handleCheckout}
-              style={[styles.checkoutButton, { backgroundColor: colors.onBubbleSurface }]}>
-              <Ionicons name="logo-whatsapp" size={18} color={colors.bubbleSurface} />
-              <ThemedText style={[styles.checkoutText, { color: colors.bubbleSurface }]}>
-                Pedir por WhatsApp
-              </ThemedText>
+              disabled={checkingOut}
+              style={[styles.checkoutButton, { backgroundColor: colors.onBubbleSurface, opacity: checkingOut ? 0.6 : 1 }]}>
+              {checkingOut ? (
+                <ActivityIndicator color={colors.bubbleSurface} />
+              ) : (
+                <>
+                  <Ionicons name="logo-whatsapp" size={18} color={colors.bubbleSurface} />
+                  <ThemedText style={[styles.checkoutText, { color: colors.bubbleSurface }]}>
+                    Pedir por WhatsApp
+                  </ThemedText>
+                </>
+              )}
             </Pressable>
           </View>
         </View>
