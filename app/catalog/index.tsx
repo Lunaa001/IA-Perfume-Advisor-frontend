@@ -19,6 +19,8 @@ const CATALOG_BACKGROUND = '#D6D4D1';
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
 
+// Un mismo chip de filtro puede representar un género o una categoría; "kind" nos
+// dice contra qué campo del producto comparar el valor al filtrar.
 type FilterOption = { value: string; label: string; kind: 'gender' | 'category' };
 
 const FILTER_OPTIONS: FilterOption[] = [
@@ -29,6 +31,8 @@ const FILTER_OPTIONS: FilterOption[] = [
   { value: 'Árabe', label: 'Árabe', kind: 'category' },
 ];
 
+// Catálogo completo navegable por el cliente, con búsqueda y filtros de género/categoría.
+// Se llega acá desde el chat ("Ver catálogo" o el ícono del header).
 export default function CatalogScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -54,6 +58,7 @@ export default function CatalogScreen() {
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
     return products.filter((product) => {
+      // Los descontinuados se mantienen en el admin como registro pero no se muestran al cliente.
       if (product.status === 'DISCONTINUED') return false;
       if (query && !product.name.toLowerCase().includes(query) && !product.brand.toLowerCase().includes(query)) {
         return false;

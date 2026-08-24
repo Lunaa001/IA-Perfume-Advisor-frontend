@@ -7,11 +7,14 @@ import { useFavorites } from '@/components/favorites/favorites-context';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AdminProduct, formatARS } from '@/lib/admin-products';
+import { AdminProduct } from '@/lib/admin-products';
+import { formatARS } from '@/lib/cart';
 
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
 
+// Se exporta porque el mismo mapeo estado/stock -> etiqueta y color se necesita en
+// la ficha de producto y en la fila de favoritos, no solo acá.
 export function stockMeta(product: AdminProduct) {
   if (product.status === 'COMING_SOON') return { label: 'Próximamente', color: '#4C7EA8' };
   if (product.status === 'DISCONTINUED') return { label: 'Descontinuado', color: '#8E8C89' };

@@ -24,6 +24,8 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ApiError } from '@/lib/api';
 
+// Login exclusivo para administradores (los clientes navegan el catálogo sin cuenta).
+// Se llega acá desde el botón "Iniciar sesión" del chat.
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -37,6 +39,9 @@ export default function LoginScreen() {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const canSubmit = username.trim().length > 0 && password.length > 0 && !submitting;
 
+  // iOS dispara "will" antes de que el teclado termine de aparecer (permite animar en paralelo),
+  // Android no tiene esos eventos así que usamos "did". LayoutAnimation acompaña el reacomodo
+  // del padding del ScrollView para que no se sienta un salto brusco.
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
@@ -64,6 +69,8 @@ export default function LoginScreen() {
       await login(username.trim(), password);
       router.replace('/admin');
     } catch (err) {
+      // Solo el 401 es "credenciales mal"; cualquier otro error (red, 500, etc.)
+      // se muestra como falla de conexión para no dar pistas de más al usuario.
       if (err instanceof ApiError && err.status === 401) {
         setError('Tu usuario o contraseña son incorrectos.');
       } else {

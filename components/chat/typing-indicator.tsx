@@ -21,6 +21,8 @@ function Dot({ delay, color }: { delay: number; color: string }) {
   return <Animated.View style={[styles.dot, { backgroundColor: color, opacity }]} />;
 }
 
+// Burbuja de "escribiendo..." (3 puntos parpadeando en secuencia) mientras se espera
+// la respuesta de la IA.
 export function TypingIndicator() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];

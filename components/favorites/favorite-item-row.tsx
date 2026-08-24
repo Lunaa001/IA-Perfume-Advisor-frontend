@@ -8,7 +8,8 @@ import { useFavorites } from '@/components/favorites/favorites-context';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AdminProduct, formatARS } from '@/lib/admin-products';
+import { AdminProduct } from '@/lib/admin-products';
+import { formatARS } from '@/lib/cart';
 
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
@@ -19,6 +20,8 @@ type Props = {
   adding: boolean;
 };
 
+// Fila de un perfume favorito. Reusa stockMeta de catalog-product-card para que la
+// etiqueta de stock se vea igual que en el catálogo y en la ficha de producto.
 export function FavoriteItemRow({ product, onAdd, adding }: Props) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
