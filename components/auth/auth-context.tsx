@@ -13,6 +13,8 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+// Sesión de administrador, persistida en SecureStore para sobrevivir a reinicios de la app.
+// Los clientes normales de la app nunca inician sesión: isAdmin solo importa para gatear /admin.
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<StoredSession | null>(null);
   const [isLoading, setIsLoading] = useState(true);

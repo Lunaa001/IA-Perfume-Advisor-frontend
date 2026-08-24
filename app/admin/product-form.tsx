@@ -35,6 +35,8 @@ import {
 } from '@/lib/admin-products';
 import { AdminColors } from '@/lib/admin-theme';
 
+// Formulario de alta/edición de un perfume del admin. Se reutiliza para ambos casos:
+// si viene un "id" por params precarga los datos existentes (isEditing), si no arranca vacío.
 export default function ProductFormScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -50,6 +52,8 @@ export default function ProductFormScreen() {
   const [stock, setStock] = useState(existing ? String(existing.stock) : '');
   const [imageUrl, setImageUrl] = useState(existing?.imageUrl ?? '');
   const [categories, setCategories] = useState<string[]>(existing?.categories ?? []);
+  // Si el producto ya tenía categorías "custom" (agregadas a mano, fuera de CATEGORY_OPTIONS),
+  // las sumamos a la lista de chips para que aparezcan seleccionables igual que las predefinidas.
   const [categoryOptions, setCategoryOptions] = useState<ChipOption[]>(() => {
     const base: ChipOption[] = [...CATEGORY_OPTIONS];
     existing?.categories.forEach((value) => {
@@ -80,6 +84,8 @@ export default function ProductFormScreen() {
     setCategories((prev) => prev.filter((c) => c !== value));
   };
 
+  // Punto de entrada común para "Galería" y "Archivo": ambos pickers terminan acá,
+  // que es lo que sube la imagen ya elegida al backend y llena el campo imageUrl.
   const uploadPickedImage = async (uri: string, name: string, mimeType: string) => {
     if (!session) {
       Alert.alert('Error', 'No hay sesión de administrador activa.');

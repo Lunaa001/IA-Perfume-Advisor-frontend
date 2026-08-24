@@ -2,11 +2,13 @@ import * as SecureStore from 'expo-secure-store';
 
 import { apiFetch } from '@/lib/api';
 
+// Login de administrador: persiste el token/rol/usuario en SecureStore (almacenamiento
+// encriptado del dispositivo) para no guardar credenciales ni token en texto plano.
 const TOKEN_KEY = 'auth_token';
 const ROLE_KEY = 'auth_role';
 const USERNAME_KEY = 'auth_username';
 
-export type AuthResponse = {
+type AuthResponse = {
   token: string;
   expiresIn: number;
   type: string;

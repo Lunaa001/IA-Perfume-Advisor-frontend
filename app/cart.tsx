@@ -16,11 +16,14 @@ import { formatARS } from '@/lib/cart';
 // Mismo gris que usan el catálogo y los favoritos.
 const CATALOG_BACKGROUND = '#D6D4D1';
 
+// Carrito del cliente. No hay checkout/pago dentro de la app: el pedido se cierra
+// redirigiendo a WhatsApp con el detalle armado por el backend.
 export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
-  const { items, totalItems, totalPrice, isLoading, error, increase, decrease, remove, checkout } = useCart();
+  const { items, totalItems, totalPrice, isLoading, error, increase, decrease, remove, checkout, confirmCheckout } =
+    useCart();
   const [checkingOut, setCheckingOut] = useState(false);
 
   const handleRemove = (perfumeId: number, name: string) => {
@@ -43,8 +46,12 @@ export default function CartScreen() {
   const handleCheckout = async () => {
     setCheckingOut(true);
     try {
+      // El backend genera el link de WhatsApp con el pedido ya armado; acá solo lo abrimos.
       const redirect = await checkout();
       await Linking.openURL(redirect.whatsappUrl);
+      // Recién acá, con WhatsApp ya abierto, vaciamos el carrito: si openURL fallara antes
+      // (sin WhatsApp instalado, etc.) el pedido arriba no se pierde.
+      await confirmCheckout();
     } catch (err) {
       Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo generar el pedido.');
     } finally {

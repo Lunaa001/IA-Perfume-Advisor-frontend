@@ -15,12 +15,15 @@ import { AdminProduct, fetchPerfumes } from '@/lib/admin-products';
 
 const CATALOG_BACKGROUND = '#D6D4D1';
 
+// Listado de perfumes guardados como favoritos. No hay endpoint de "favoritos" en el
+// backend: se trae el catálogo completo y se filtra localmente por los ids guardados
+// en el dispositivo (ver favorites-context / lib/favorites).
 export default function FavoritesScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
   const { addItem } = useCart();
-  const { favoriteIds } = useFavorites();
+  const { favoriteIds, pruneMissing } = useFavorites();
 
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,10 +32,15 @@ export default function FavoritesScreen() {
 
   useEffect(() => {
     fetchPerfumes()
-      .then(setProducts)
+      .then((loaded) => {
+        setProducts(loaded);
+        // Aprovechamos que ya tenemos el catálogo completo para sacar de favoritos
+        // cualquier id de un producto que el admin haya borrado.
+        pruneMissing(loaded.map((product) => product.id));
+      })
       .catch((err) => setError(err instanceof Error ? err.message : 'No se pudo cargar tus favoritos.'))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [pruneMissing]);
 
   const favorites = useMemo(
     () => products.filter((product) => favoriteIds.includes(product.id)),
