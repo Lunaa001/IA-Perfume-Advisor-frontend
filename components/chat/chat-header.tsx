@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useCart } from '@/components/cart/cart-context';
+import { useFavorites } from '@/components/favorites/favorites-context';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -16,6 +17,7 @@ export function ChatHeader() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { totalItems } = useCart();
+  const { favoriteIds } = useFavorites();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
@@ -33,23 +35,46 @@ export function ChatHeader() {
         </ThemedText>
       </Pressable>
 
-      <View style={styles.cartWrapper}>
-        <Pressable
-          hitSlop={8}
-          onPress={() => router.push('/cart')}
-          style={styles.cartBubble}>
-          <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
-          <View
-            style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
-          />
-          <Ionicons name="cart-outline" size={19} color={colors.onBubbleSurface} />
-        </Pressable>
+      <View style={styles.actionsRow}>
+        <View style={styles.cartWrapper}>
+          <Pressable
+            hitSlop={8}
+            onPress={() => router.push('/catalog/favorites')}
+            style={styles.cartBubble}>
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <View
+              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+            />
+            <Ionicons name="heart-outline" size={18} color={colors.onBubbleSurface} />
+          </Pressable>
 
-        {totalItems > 0 && (
-          <View style={styles.badge} pointerEvents="none">
-            <ThemedText style={styles.badgeText}>{totalItems > 9 ? '9+' : totalItems}</ThemedText>
-          </View>
-        )}
+          {favoriteIds.length > 0 && (
+            <View style={styles.badge} pointerEvents="none">
+              <ThemedText style={styles.badgeText}>
+                {favoriteIds.length > 9 ? '9+' : favoriteIds.length}
+              </ThemedText>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.cartWrapper}>
+          <Pressable
+            hitSlop={8}
+            onPress={() => router.push('/cart')}
+            style={styles.cartBubble}>
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <View
+              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+            />
+            <Ionicons name="cart-outline" size={19} color={colors.onBubbleSurface} />
+          </Pressable>
+
+          {totalItems > 0 && (
+            <View style={styles.badge} pointerEvents="none">
+              <ThemedText style={styles.badgeText}>{totalItems > 9 ? '9+' : totalItems}</ThemedText>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -81,6 +106,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     letterSpacing: 0.2,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    gap: 10,
   },
   cartWrapper: {
     width: 38,

@@ -20,9 +20,17 @@ export type ChatReply = {
   recommendations: RecommendationItem[];
 };
 
-export async function sendChatMessage(message: string): Promise<ChatReply> {
+export type ChatHistoryItem = {
+  role: 'user' | 'assistant';
+  message: string;
+};
+
+export async function sendChatMessage(
+  message: string,
+  history: ChatHistoryItem[] = [],
+): Promise<ChatReply> {
   return apiFetch<ChatReply>('/api/chat', {
     method: 'POST',
-    body: { message },
+    body: { message, history },
   });
 }

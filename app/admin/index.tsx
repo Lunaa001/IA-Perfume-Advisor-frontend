@@ -55,18 +55,18 @@ export default function AdminDashboardScreen() {
     <View style={[styles.flex, { backgroundColor: AdminColors.background }]}>
       <BackgroundTexture color={AdminColors.texture} />
 
-      <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: AdminColors.borderOnDark }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: AdminColors.border }]}>
         <Pressable hitSlop={10} onPress={() => router.replace('/')} style={styles.iconButton}>
-          <Ionicons name="arrow-back" size={22} color={AdminColors.textOnDark} />
+          <Ionicons name="arrow-back" size={22} color={AdminColors.text} />
         </Pressable>
         <View style={styles.headerTitles}>
-          <ThemedText style={[styles.title, { color: AdminColors.textOnDark }]}>Catálogo</ThemedText>
-          <ThemedText style={[styles.subtitle, { color: AdminColors.mutedOnDark }]}>
+          <ThemedText style={[styles.title, { color: AdminColors.text }]}>Catálogo</ThemedText>
+          <ThemedText style={[styles.subtitle, { color: AdminColors.muted }]}>
             {products.length} {products.length === 1 ? 'producto' : 'productos'}
           </ThemedText>
         </View>
         <Pressable hitSlop={10} onPress={handleLogout} style={styles.iconButton}>
-          <Ionicons name="log-out-outline" size={22} color={AdminColors.textOnDark} />
+          <Ionicons name="log-out-outline" size={22} color={AdminColors.text} />
         </Pressable>
       </View>
 
@@ -103,13 +103,13 @@ export default function AdminDashboardScreen() {
       </View>
 
       <Pressable onPress={() => setListVisible((prev) => !prev)} style={styles.toggleRow} hitSlop={6}>
-        <ThemedText style={[styles.toggleText, { color: AdminColors.mutedOnDark }]}>
+        <ThemedText style={[styles.toggleText, { color: AdminColors.muted }]}>
           {listVisible ? 'Ocultar listado' : 'Mostrar listado'}
         </ThemedText>
         <Ionicons
           name={listVisible ? 'chevron-up' : 'chevron-down'}
           size={13}
-          color={AdminColors.mutedOnDark}
+          color={AdminColors.muted}
         />
       </Pressable>
 
@@ -120,7 +120,7 @@ export default function AdminDashboardScreen() {
           contentContainerStyle={styles.list}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={refresh} tintColor={AdminColors.textOnDark} />
+            <RefreshControl refreshing={isLoading} onRefresh={refresh} tintColor={AdminColors.text} />
           }
           renderItem={({ item }) => (
             <ProductCard
@@ -132,11 +132,11 @@ export default function AdminDashboardScreen() {
           ListEmptyComponent={
             <View style={styles.empty}>
               {isLoading ? (
-                <ActivityIndicator color={AdminColors.textOnDark} />
+                <ActivityIndicator color={AdminColors.text} />
               ) : (
                 <>
-                  <Ionicons name="flask-outline" size={28} color={AdminColors.mutedOnDark} />
-                  <ThemedText style={{ color: AdminColors.mutedOnDark, marginTop: 8 }}>
+                  <Ionicons name="flask-outline" size={28} color={AdminColors.muted} />
+                  <ThemedText style={{ color: AdminColors.muted, marginTop: 8 }}>
                     No se encontraron productos.
                   </ThemedText>
                 </>

@@ -5,16 +5,23 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useCart } from '@/components/cart/cart-context';
+import { useFavorites } from '@/components/favorites/favorites-context';
+import { FormattedText } from '@/components/chat/formatted-text';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { formatARS } from '@/lib/cart';
 import type { RecommendationItem } from '@/lib/chat';
 
+// Mismo azul marino que el botón "Ingresar" del login.
+const CATALOG_ACCENT = '#192637';
+
 export function RecommendationCard({ item }: { item: RecommendationItem }) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(item.perfumeId);
   const [status, setStatus] = useState<'idle' | 'adding' | 'added'>('idle');
 
   const handleAdd = async () => {
@@ -34,6 +41,17 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
       <View
         style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
       />
+
+      <Pressable
+        onPress={() => toggleFavorite(item.perfumeId)}
+        hitSlop={8}
+        style={styles.favoriteButton}>
+        <Ionicons
+          name={favorite ? 'heart' : 'heart-outline'}
+          size={17}
+          color={favorite ? '#E14B4B' : colors.onBubbleSurface}
+        />
+      </Pressable>
 
       <View style={styles.topRow}>
         {item.imageUrl ? (
@@ -59,11 +77,11 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
       </View>
 
       {!!item.description && (
-        <ThemedText
+        <FormattedText
           style={[styles.description, { color: colors.onBubbleSurfaceMuted }]}
-          numberOfLines={3}>
-          {item.description}
-        </ThemedText>
+          text={item.description}
+          numberOfLines={3}
+        />
       )}
 
       <Pressable
@@ -71,7 +89,7 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
         disabled={status !== 'idle'}
         style={[
           styles.addButton,
-          { backgroundColor: colors.onBubbleSurface, opacity: status === 'adding' ? 0.6 : 1 },
+          { backgroundColor: CATALOG_ACCENT, opacity: status === 'adding' ? 0.6 : 1 },
         ]}>
         <Ionicons
           name={status === 'added' ? 'checkmark' : 'cart-outline'}
@@ -93,9 +111,22 @@ const styles = StyleSheet.create({
     marginTop: 6,
     overflow: 'hidden',
   },
+  favoriteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(120,120,120,0.3)',
+  },
   topRow: {
     flexDirection: 'row',
     gap: 10,
+    paddingRight: 26,
   },
   thumb: {
     width: 56,

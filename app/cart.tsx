@@ -8,12 +8,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '@/components/cart/cart-context';
 import { CartItemRow } from '@/components/cart/cart-item-row';
 import { BackgroundTexture } from '@/components/chat/background-texture';
-import { HeroOverlay } from '@/components/chat/hero-overlay';
-import { TopFade } from '@/components/chat/top-fade';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { formatARS } from '@/lib/cart';
+
+// Mismo gris que usan el catálogo y los favoritos.
+const CATALOG_BACKGROUND = '#D6D4D1';
 
 export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -52,10 +53,8 @@ export default function CartScreen() {
   };
 
   return (
-    <View style={[styles.flex, { backgroundColor: colors.background }]}>
+    <View style={[styles.flex, { backgroundColor: CATALOG_BACKGROUND }]}>
       <BackgroundTexture color={colors.texture} />
-      <TopFade />
-      <HeroOverlay fadingOut={false} intensity={0.6} />
 
       <Pressable
         hitSlop={8}
@@ -69,9 +68,9 @@ export default function CartScreen() {
       </Pressable>
 
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <ThemedText style={styles.title}>Tu carrito</ThemedText>
+        <ThemedText style={[styles.title, { color: colors.text }]}>Tu carrito</ThemedText>
         {items.length > 0 && (
-          <ThemedText style={styles.subtitle}>
+          <ThemedText style={[styles.subtitle, { color: colors.muted }]}>
             {totalItems} {totalItems === 1 ? 'producto' : 'productos'}
           </ThemedText>
         )}
@@ -79,17 +78,17 @@ export default function CartScreen() {
 
       {isLoading ? (
         <View style={styles.empty}>
-          <ActivityIndicator color="#FFFFFF" />
+          <ActivityIndicator color={colors.tint} />
         </View>
       ) : error ? (
         <View style={styles.empty}>
-          <Ionicons name="alert-circle-outline" size={32} color="rgba(255,255,255,0.6)" />
-          <ThemedText style={styles.emptyText}>{error}</ThemedText>
+          <Ionicons name="alert-circle-outline" size={32} color={colors.muted} />
+          <ThemedText style={[styles.emptyText, { color: colors.muted }]}>{error}</ThemedText>
         </View>
       ) : items.length === 0 ? (
         <View style={styles.empty}>
-          <Ionicons name="cart-outline" size={32} color="rgba(255,255,255,0.6)" />
-          <ThemedText style={styles.emptyText}>Tu carrito está vacío.</ThemedText>
+          <Ionicons name="cart-outline" size={32} color={colors.muted} />
+          <ThemedText style={[styles.emptyText, { color: colors.muted }]}>Tu carrito está vacío.</ThemedText>
           <Pressable onPress={() => router.back()} style={styles.emptyButton}>
             <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
             <View
@@ -172,12 +171,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   title: {
-    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: '700',
   },
   subtitle: {
-    color: 'rgba(255,255,255,0.65)',
     fontSize: 13,
     marginTop: 2,
   },
@@ -193,7 +190,6 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   emptyText: {
-    color: 'rgba(255,255,255,0.75)',
     fontSize: 14,
   },
   emptyButton: {
