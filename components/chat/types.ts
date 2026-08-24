@@ -1,3 +1,5 @@
+import type { Href } from 'expo-router';
+
 import type { RecommendationItem } from '@/lib/chat';
 
 export type ChatMessage = {
@@ -5,4 +7,5 @@ export type ChatMessage = {
   role: 'user' | 'assistant';
   text: string;
   recommendations?: RecommendationItem[];
+  cta?: { label: string; href: Href };
 };

@@ -26,7 +26,13 @@ export default function ChatScreen() {
   const [hasUserMessaged, setHasUserMessaged] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [isWaitingReply, setIsWaitingReply] = useState(false);
+  const [logoTimedOut, setLogoTimedOut] = useState(false);
   const listRef = useRef<FlatList<ChatMessage>>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLogoTimedOut(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (messages.length === 0) return;
@@ -48,6 +54,12 @@ export default function ChatScreen() {
         role: 'assistant',
         text: 'Contame qué buscás y encontramos tu fragancia',
       },
+      {
+        id: 'greeting-3',
+        role: 'assistant',
+        text: 'Podés charlar conmigo para encontrar tu perfume ideal, o consultar nuestro catálogo',
+        cta: { label: 'Ver catálogo', href: '/catalog' },
+      },
     ];
 
     const timers = greetings.map((greeting, index) =>
@@ -64,6 +76,10 @@ export default function ChatScreen() {
     const trimmed = input.trim();
     if (!trimmed) return;
 
+    const history = messages
+      .filter((m) => !m.id.endsWith('-error'))
+      .map((m) => ({ role: m.role, message: m.text }));
+
     const userMessage: ChatMessage = { id: `${Date.now()}`, role: 'user', text: trimmed };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
@@ -71,7 +87,7 @@ export default function ChatScreen() {
     setIsWaitingReply(true);
 
     try {
-      const reply = await sendChatMessage(trimmed);
+      const reply = await sendChatMessage(trimmed, history);
       setMessages((prev) => [
         ...prev,
         { id: reply.id, role: 'assistant', text: reply.response, recommendations: reply.recommendations },
@@ -103,7 +119,7 @@ export default function ChatScreen() {
       <ChatHeader />
 
       <View style={[styles.flex, hasUserMessaged && { marginTop: headerClearance }]}>
-        <HeroLogo fadingOut={hasUserMessaged || inputFocused} />
+        <HeroLogo fadingOut={hasUserMessaged || inputFocused || logoTimedOut} />
         <FlatList
           ref={listRef}
           data={messages}

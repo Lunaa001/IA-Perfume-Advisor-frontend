@@ -1,6 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, StyleSheet, View } from 'react-native';
 
+import { FormattedText } from '@/components/chat/formatted-text';
 import { RecommendationCard } from '@/components/chat/recommendation-card';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
@@ -34,14 +37,26 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
               />
             </>
           )}
-          <ThemedText style={{ color: isUser ? colors.onBubbleSurface : colors.text }}>
-            {message.text}
-          </ThemedText>
+          <FormattedText
+            text={message.text}
+            style={{ color: isUser ? colors.onBubbleSurface : colors.text }}
+          />
         </View>
 
         {message.recommendations?.map((item) => (
           <RecommendationCard key={item.perfumeId} item={item} />
         ))}
+
+        {message.cta && (
+          <Pressable
+            onPress={() => router.push(message.cta!.href)}
+            style={[styles.ctaButton, { backgroundColor: colors.onBubbleSurface }]}>
+            <ThemedText style={[styles.ctaText, { color: colors.bubbleSurface }]}>
+              {message.cta.label}
+            </ThemedText>
+            <Ionicons name="arrow-forward" size={15} color={colors.bubbleSurface} />
+          </Pressable>
+        )}
       </View>
     </View>
   );
@@ -67,4 +82,18 @@ const styles = StyleSheet.create({
   },
   bubbleUser: { borderTopRightRadius: 4 },
   bubbleAssistant: { borderTopLeftRadius: 4 },
+  ctaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 8,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  ctaText: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
 });

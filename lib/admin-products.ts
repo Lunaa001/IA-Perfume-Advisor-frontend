@@ -114,6 +114,11 @@ export async function fetchPerfumes(): Promise<AdminProduct[]> {
   return data.map(fromResponse);
 }
 
+export async function fetchPerfumeById(id: string): Promise<AdminProduct> {
+  const data = await apiFetch<PerfumeResponse>(`/api/perfumes/${id}`);
+  return fromResponse(data);
+}
+
 export async function createPerfume(draft: PerfumeDraft, token: string): Promise<AdminProduct> {
   const response = await apiFetch<PerfumeResponse>('/api/admin/perfumes', {
     method: 'POST',

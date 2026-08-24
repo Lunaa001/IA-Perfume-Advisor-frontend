@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 
 import { AuthProvider } from '@/components/auth/auth-context';
 import { CartProvider } from '@/components/cart/cart-context';
+import { FavoritesProvider } from '@/components/favorites/favorites-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function RootLayout() {
@@ -16,12 +17,15 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <AuthProvider>
           <CartProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="login" />
-              <Stack.Screen name="admin" />
-              <Stack.Screen name="cart" />
-            </Stack>
+            <FavoritesProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="index" />
+                <Stack.Screen name="login" />
+                <Stack.Screen name="admin" />
+                <Stack.Screen name="cart" />
+                <Stack.Screen name="catalog" />
+              </Stack>
+            </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
         <StatusBar style="auto" />
