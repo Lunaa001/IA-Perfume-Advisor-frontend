@@ -4,8 +4,9 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { StatusBadge } from '@/components/admin/status-badge';
 import { ThemedText } from '@/components/themed-text';
-import { AdminProduct, categoryLabel, formatARS } from '@/lib/admin-products';
+import { AdminProduct, categoryLabel } from '@/lib/admin-products';
 import { AdminColors } from '@/lib/admin-theme';
+import { formatARS } from '@/lib/cart';
 
 type Props = {
   product: AdminProduct;

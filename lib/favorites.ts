@@ -1,5 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
+// Favoritos guardados solo en el dispositivo (no hay endpoint de backend para esto),
+// como lista de ids en SecureStore.
 const FAVORITES_KEY = 'favorite_perfume_ids';
 
 export async function loadFavorites(): Promise<string[]> {

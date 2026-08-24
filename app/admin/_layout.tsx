@@ -5,6 +5,9 @@ import { useAuth } from '@/components/auth/auth-context';
 import { ProductsProvider } from '@/components/admin/product-context';
 import { Colors } from '@/constants/theme';
 
+// Guardia de acceso: mientras se resuelve la sesión mostramos un loader, y si quien
+// entra no es admin lo mandamos al login. ProductsProvider se monta recién acá para no
+// pedir el catálogo de admin a nadie que no haya pasado el chequeo.
 export default function AdminLayout() {
   const { isAdmin, isLoading } = useAuth();
 

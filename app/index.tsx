@@ -15,6 +15,9 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { sendChatMessage } from '@/lib/chat';
 
+// Pantalla de entrada de la app: el "asesor IA" conversacional. Antes de que el usuario
+// escriba nada muestra el hero (logo + overlay); en cuanto manda el primer mensaje pasa
+// a un layout de chat normal con historial y barra de input fija.
 export default function ChatScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -29,6 +32,8 @@ export default function ChatScreen() {
   const [logoTimedOut, setLogoTimedOut] = useState(false);
   const listRef = useRef<FlatList<ChatMessage>>(null);
 
+  // El logo se desvanece solo a los 2s aunque el usuario no toque el input, así no
+  // queda tapando la pantalla de forma indefinida si tarda en escribir.
   useEffect(() => {
     const timer = setTimeout(() => setLogoTimedOut(true), 2000);
     return () => clearTimeout(timer);
@@ -46,6 +51,8 @@ export default function ChatScreen() {
     return () => clearTimeout(timer);
   }, [isWaitingReply]);
 
+  // Saludo inicial armado como 3 mensajes escalonados (en vez de uno solo) para que se
+  // sienta como que la IA está "escribiendo", no como un bloque de texto pegado de una.
   useEffect(() => {
     const greetings: ChatMessage[] = [
       { id: 'greeting-1', role: 'assistant', text: 'Hola, ¿cómo estás?' },
@@ -76,6 +83,9 @@ export default function ChatScreen() {
     const trimmed = input.trim();
     if (!trimmed) return;
 
+    // Los mensajes de error de conexión son locales (id termina en "-error") y no representan
+    // nada que la IA haya dicho o el usuario haya pedido, así que no van en el historial que
+    // se manda de contexto al backend.
     const history = messages
       .filter((m) => !m.id.endsWith('-error'))
       .map((m) => ({ role: m.role, message: m.text }));
@@ -106,6 +116,8 @@ export default function ChatScreen() {
     }
   };
 
+  // Una vez que hay conversación cambiamos a un fondo/textura levemente más oscuros
+  // para diferenciar visualmente el modo "chat" del hero inicial.
   const screenBackground = hasUserMessaged ? colors.chatBackground : colors.background;
   const textureColor = hasUserMessaged ? colors.textureOnChat : colors.texture;
 

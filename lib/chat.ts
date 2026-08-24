@@ -1,3 +1,6 @@
+// Cliente del endpoint de chat con la IA: manda el mensaje nuevo junto con el historial
+// previo (sin los mensajes de error locales, ver app/index.tsx) para que las respuestas
+// tengan en cuenta el contexto de la conversación.
 import { apiFetch } from '@/lib/api';
 
 export type RecommendationItem = {
@@ -14,13 +17,13 @@ export type RecommendationItem = {
   matchScore: number;
 };
 
-export type ChatReply = {
+type ChatReply = {
   id: string;
   response: string;
   recommendations: RecommendationItem[];
 };
 
-export type ChatHistoryItem = {
+type ChatHistoryItem = {
   role: 'user' | 'assistant';
   message: string;
 };

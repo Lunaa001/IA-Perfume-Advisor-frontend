@@ -11,6 +11,8 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import type { ChatMessage } from './types';
 
+// Renderiza un mensaje del chat (usuario o IA), y si el mensaje trae recomendaciones
+// o un CTA (ej. "Ver catálogo") los muestra debajo de la burbuja de texto.
 export function MessageBubble({ message }: { message: ChatMessage }) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -26,6 +28,8 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
             { borderColor: colors.border },
             !isUser && { backgroundColor: colors.card },
           ]}>
+          {/* El efecto vidrio (blur) es solo para la burbuja del usuario; la de la IA
+              usa una tarjeta sólida (colors.card) para diferenciarlas a simple vista. */}
           {isUser && (
             <>
               <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />

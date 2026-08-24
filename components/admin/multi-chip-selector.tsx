@@ -15,6 +15,10 @@ type Props = {
   onRemove: (value: string) => void;
 };
 
+// Selector de categorías (multi-selección) para el form de admin. Además de tildar/destildar
+// las categorías predefinidas, permite escribir una nueva al vuelo y "eliminarla" de la
+// lista de opciones de este formulario (eso no borra la categoría de otros productos que
+// ya la tengan asignada, solo la saca de los chips disponibles acá).
 export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRemove }: Props) {
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState('');

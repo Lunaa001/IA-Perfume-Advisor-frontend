@@ -39,7 +39,6 @@
           }
         }
       ],
-      "expo-web-browser",
       "expo-font",
       "expo-secure-store",
       [

@@ -31,6 +31,8 @@ type RequestOptions = Omit<RequestInit, 'body'> & {
   headers?: Record<string, string>;
 };
 
+// Wrapper único de fetch para toda la app: arma la URL con API_BASE_URL, serializa el
+// body a JSON, agrega el Bearer token si vino uno, y traduce respuestas no-OK en ApiError.
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, token, headers, ...rest } = options;
 
@@ -44,10 +46,13 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
+  // 204 (ej. DELETE) no trae body; evitamos leerlo para no fallar al parsear un string vacío.
   if (response.status === 204) {
     return undefined as T;
   }
 
+  // Algunos endpoints devuelven body vacío incluso sin ser 204, así que solo parseamos
+  // si efectivamente hay texto.
   const text = await response.text();
   const data = text ? JSON.parse(text) : undefined;
 

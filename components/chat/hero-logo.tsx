@@ -6,6 +6,8 @@ type Props = {
   fadingOut: boolean;
 };
 
+// Marca de agua del logo detrás del hero. Solo anima en un sentido (aparece visible
+// y se apaga una vez); no vuelve a mostrarse aunque "fadingOut" pase a false después.
 export function HeroLogo({ fadingOut }: Props) {
   const opacity = useRef(new Animated.Value(1)).current;
 
