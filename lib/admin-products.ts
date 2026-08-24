@@ -1,6 +1,9 @@
+// Cliente de la API de perfumes: mapea el DTO del backend (con nulls y enums en string)
+// al shape que usan las pantallas (AdminProduct), y expone tanto el CRUD de admin como
+// las lecturas públicas (fetchPerfumes/fetchPerfumeById) que usa el catálogo del cliente.
 import { ApiError, API_BASE_URL, apiFetch } from '@/lib/api';
 
-export type PerfumeCategory =
+type PerfumeCategory =
   | 'FLORAL'
   | 'FRUITY'
   | 'ORIENTAL'
@@ -41,6 +44,8 @@ type PerfumeResponse = {
   rating: number | null;
 };
 
+// Convierte los nulls del backend (description/imageUrl) en strings vacíos para que
+// los componentes no tengan que chequear null en cada uso.
 function fromResponse(response: PerfumeResponse): AdminProduct {
   return {
     id: String(response.id),
@@ -92,9 +97,6 @@ export function statusMeta(value: PerfumeStatus) {
   return STATUS_OPTIONS.find((o) => o.value === value) ?? STATUS_OPTIONS[0];
 }
 
-export function formatARS(price: number) {
-  return `$${Math.round(price).toLocaleString('en-US')}`;
-}
 
 // El admin escribe el precio como pesos enteros con coma de miles (ej: 58,000).
 export function formatPriceInput(raw: string): string {
@@ -148,6 +150,9 @@ export async function deletePerfume(id: string, token: string): Promise<void> {
   });
 }
 
+// Usa fetch directo en vez de apiFetch porque el body es FormData (multipart): hay que
+// dejar que fetch ponga su propio Content-Type con el boundary, cosa que apiFetch no
+// contempla al forzar 'application/json'.
 export async function uploadPerfumeImage(
   uri: string,
   fileName: string,

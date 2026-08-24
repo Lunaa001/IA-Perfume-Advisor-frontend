@@ -10,8 +10,12 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+// Alto aproximado del header para que app/index.tsx pueda correr el contenido de la
+// lista de mensajes hacia abajo (marginTop) una vez que el header queda fijo arriba.
 export const HEADER_CLEARANCE = 54;
 
+// Header flotante del chat: acceso a login, favoritos y carrito. Se muestra siempre,
+// tanto en el hero inicial como durante la conversación.
 export function ChatHeader() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';

@@ -11,6 +11,8 @@ type Props<T extends string> = {
   onChange: (value: T) => void;
 };
 
+// Selector de una sola opción en forma de chips horizontales. Genérico en T para
+// poder reusarlo tanto con género como con estado del producto en el form de admin.
 export function ChipSelector<T extends string>({ options, value, onChange }: Props<T>) {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.row}>

@@ -11,6 +11,8 @@ import { BackgroundTexture } from '@/components/chat/background-texture';
 import { ThemedText } from '@/components/themed-text';
 import { AdminColors } from '@/lib/admin-theme';
 
+// Pantalla principal del panel de admin: buscador + listado del catálogo, con alta (FAB),
+// edición y baja de productos.
 export default function AdminDashboardScreen() {
   const insets = useSafeAreaInsets();
   const { products, isLoading, error, refresh, removeProduct } = useProducts();
@@ -91,6 +93,7 @@ export default function AdminDashboardScreen() {
           />
         </View>
 
+        {/* Además de limpiar el texto, reabre el listado por si el admin lo había colapsado. */}
         <Pressable
           hitSlop={8}
           onPress={() => {

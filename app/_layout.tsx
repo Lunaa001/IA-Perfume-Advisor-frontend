@@ -9,6 +9,8 @@ import { CartProvider } from '@/components/cart/cart-context';
 import { FavoritesProvider } from '@/components/favorites/favorites-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+// Layout raíz: monta los providers globales (auth, carrito, favoritos) una sola vez
+// y define el stack de rutas de primer nivel. Todo lo que cuelga de acá comparte esa sesión/estado.
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 

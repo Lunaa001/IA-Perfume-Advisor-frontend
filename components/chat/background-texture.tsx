@@ -5,6 +5,8 @@ type Props = {
   color: string;
 };
 
+// Granulado sutil de fondo (puntitos repetidos vía patrón SVG) para dar textura sin
+// pesar como una imagen; se reusa en chat, catálogo, carrito y admin con distintos colores.
 export function BackgroundTexture({ color }: Props) {
   return (
     <Svg style={StyleSheet.absoluteFillObject} pointerEvents="none">

@@ -16,12 +16,16 @@ import type { RecommendationItem } from '@/lib/chat';
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
 
+// Tarjeta de un perfume que la IA recomendó dentro de la conversación, con acción
+// rápida de agregar al carrito sin tener que salir del chat.
 export function RecommendationCard({ item }: { item: RecommendationItem }) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { addItem } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(item.perfumeId);
+  // Estado local por tarjeta: si la IA recomienda varios perfumes en el mismo mensaje,
+  // cada uno muestra su propio feedback de "Agregado" sin afectar a los demás.
   const [status, setStatus] = useState<'idle' | 'adding' | 'added'>('idle');
 
   const handleAdd = async () => {

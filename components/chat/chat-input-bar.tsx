@@ -13,6 +13,8 @@ type Props = {
   onFocus?: () => void;
 };
 
+// Barra de texto fija abajo para hablar con la IA. onFocus es opcional porque lo usa
+// la pantalla de chat para apagar el logo hero apenas el usuario toca el input.
 export function ChatInputBar({ value, onChangeText, onSend, onFocus }: Props) {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';

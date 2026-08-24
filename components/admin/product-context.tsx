@@ -17,6 +17,9 @@ type ProductsContextValue = {
 
 const ProductsContext = createContext<ProductsContextValue | null>(null);
 
+// Estado del catálogo para el panel de admin (CRUD completo). Solo se monta dentro de
+// las rutas /admin (ver app/admin/_layout.tsx), así que asumimos que puede no haber
+// sesión todavía al momento de mutar y lo validamos explícitamente en cada acción.
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
   const { session } = useAuth();
   const [products, setProducts] = useState<AdminProduct[]>([]);

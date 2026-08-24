@@ -10,6 +10,8 @@ type Props = {
   intensity?: number;
 };
 
+// Degradado oscuro sobre el fondo del hero para que el header y el texto se lean bien
+// encima de la imagen/textura; se desvanece cuando arranca la conversación (fadingOut).
 export function HeroOverlay({ fadingOut, intensity = 1 }: Props) {
   const opacity = useRef(new Animated.Value(1)).current;
   const alpha = (base: number) => base * intensity;

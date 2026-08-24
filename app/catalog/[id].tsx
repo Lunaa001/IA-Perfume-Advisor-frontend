@@ -18,6 +18,7 @@ import { AdminProduct, categoryLabel, fetchPerfumeById, genderLabel } from '@/li
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
 
+// Ficha de un perfume individual: imagen grande, descripción y acción de agregar al carrito.
 export default function ProductDetailScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -45,6 +46,8 @@ export default function ProductDetailScreen() {
     try {
       await addItem(Number(product.id));
       setAddStatus('added');
+      // Deja el "Agregado al carrito" un rato en pantalla como confirmación visual
+      // y después vuelve solo al estado normal del botón.
       setTimeout(() => setAddStatus('idle'), 1800);
     } catch {
       setAddStatus('idle');
