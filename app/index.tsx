@@ -100,7 +100,13 @@ export default function ChatScreen() {
       const reply = await sendChatMessage(trimmed, history);
       setMessages((prev) => [
         ...prev,
-        { id: reply.id, role: 'assistant', text: reply.response, recommendations: reply.recommendations },
+        {
+          id: reply.id,
+          role: 'assistant',
+          text: reply.response,
+          recommendations: reply.recommendations,
+          cta: { label: 'Ver catálogo', href: '/catalog' },
+        },
       ]);
     } catch {
       setMessages((prev) => [
