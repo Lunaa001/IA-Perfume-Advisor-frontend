@@ -10,6 +10,7 @@ import { FormattedText } from '@/components/chat/formatted-text';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { resolveImageUrl } from '@/lib/api';
 import { formatARS } from '@/lib/cart';
 import type { RecommendationItem } from '@/lib/chat';
 
@@ -59,7 +60,7 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
 
       <View style={styles.topRow}>
         {item.imageUrl ? (
-          <Image source={{ uri: item.imageUrl }} style={styles.thumb} contentFit="cover" />
+          <Image source={{ uri: resolveImageUrl(item.imageUrl) }} style={styles.thumb} contentFit="cover" />
         ) : (
           <View
             style={[styles.thumb, styles.thumbPlaceholder, { backgroundColor: `${colors.onBubbleSurface}0D` }]}>

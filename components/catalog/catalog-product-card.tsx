@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AdminProduct } from '@/lib/admin-products';
+import { resolveImageUrl } from '@/lib/api';
 import { formatARS } from '@/lib/cart';
 
 // Mismo azul marino que el botón "Ingresar" del login.
@@ -42,7 +43,7 @@ export function CatalogProductCard({ product, onAdd, adding }: Props) {
       style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
       <View style={styles.imageWrapper}>
         {product.imageUrl ? (
-          <Image source={{ uri: product.imageUrl }} style={styles.image} contentFit="cover" />
+          <Image source={{ uri: resolveImageUrl(product.imageUrl) }} style={styles.image} contentFit="cover" />
         ) : (
           <View style={[styles.image, styles.imagePlaceholder, { backgroundColor: colors.background }]}>
             <Ionicons name="flask-outline" size={24} color={colors.muted} />

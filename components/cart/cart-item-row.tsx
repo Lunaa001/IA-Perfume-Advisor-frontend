@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { resolveImageUrl } from '@/lib/api';
 import { CartItem, formatARS } from '@/lib/cart';
 
 type Props = {
@@ -25,7 +26,7 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: Props) {
       <View style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
 
       {item.imageUrl ? (
-        <Image source={{ uri: item.imageUrl }} style={styles.thumb} contentFit="cover" />
+        <Image source={{ uri: resolveImageUrl(item.imageUrl) }} style={styles.thumb} contentFit="cover" />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder, { backgroundColor: `${colors.onBubbleSurface}0D` }]}>
           <Ionicons name="image-outline" size={20} color={colors.onBubbleSurfaceMuted} />

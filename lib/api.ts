@@ -16,6 +16,19 @@ function resolveApiBaseUrl(): string {
 
 export const API_BASE_URL = resolveApiBaseUrl();
 
+// El backend guarda la URL de cada foto ya armada con el host que tenía en el momento de
+// subirla (ver ImageStorageServiceImpl.buildPublicUrl): si cambiás de red, esa IP vieja queda
+// muerta y la foto no carga más aunque el backend este perfecto. Reconstruimos la URL siempre
+// con el host actual, tomando todo desde "/uploads/" en adelante (funciona con URLs viejas de
+// otra IP y con rutas relativas nuevas por igual).
+export function resolveImageUrl(imageUrl: string | null | undefined): string {
+  if (!imageUrl) return '';
+  const marker = '/uploads/';
+  const markerIndex = imageUrl.indexOf(marker);
+  const path = markerIndex >= 0 ? imageUrl.slice(markerIndex) : imageUrl;
+  return path.startsWith('http') ? path : `${API_BASE_URL}${path}`;
+}
+
 export class ApiError extends Error {
   status: number;
 

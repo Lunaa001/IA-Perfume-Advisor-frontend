@@ -6,6 +6,7 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { ThemedText } from '@/components/themed-text';
 import { AdminProduct, categoryLabel } from '@/lib/admin-products';
 import { AdminColors } from '@/lib/admin-theme';
+import { resolveImageUrl } from '@/lib/api';
 import { formatARS } from '@/lib/cart';
 
 type Props = {
@@ -20,7 +21,7 @@ export function ProductCard({ product, onPress, onDelete }: Props) {
       onPress={onPress}
       style={[styles.card, { backgroundColor: AdminColors.surface, borderColor: AdminColors.border }]}>
       {product.imageUrl ? (
-        <Image source={{ uri: product.imageUrl }} style={styles.thumb} contentFit="cover" />
+        <Image source={{ uri: resolveImageUrl(product.imageUrl) }} style={styles.thumb} contentFit="cover" />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder, { backgroundColor: AdminColors.surfaceMuted }]}>
           <Ionicons name="image-outline" size={22} color={AdminColors.muted} />

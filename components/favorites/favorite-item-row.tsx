@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AdminProduct } from '@/lib/admin-products';
+import { resolveImageUrl } from '@/lib/api';
 import { formatARS } from '@/lib/cart';
 
 // Mismo azul marino que el botón "Ingresar" del login.
@@ -34,7 +35,7 @@ export function FavoriteItemRow({ product, onAdd, adding }: Props) {
       onPress={() => router.push({ pathname: '/catalog/[id]', params: { id: product.id } })}
       style={[styles.row, { backgroundColor: colors.card, borderColor: colors.border }]}>
       {product.imageUrl ? (
-        <Image source={{ uri: product.imageUrl }} style={styles.thumb} contentFit="cover" />
+        <Image source={{ uri: resolveImageUrl(product.imageUrl) }} style={styles.thumb} contentFit="cover" />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder, { backgroundColor: colors.background }]}>
           <Ionicons name="flask-outline" size={20} color={colors.muted} />

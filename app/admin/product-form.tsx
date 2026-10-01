@@ -23,6 +23,7 @@ import { useProducts } from '@/components/admin/product-context';
 import { useAuth } from '@/components/auth/auth-context';
 import { BackgroundTexture } from '@/components/chat/background-texture';
 import { ThemedText } from '@/components/themed-text';
+import { resolveImageUrl } from '@/lib/api';
 import {
   CATEGORY_OPTIONS,
   formatPriceInput,
@@ -213,7 +214,7 @@ export default function ProductFormScreen() {
         <ThemedText style={[styles.label, { color: AdminColors.muted }]}>Foto del producto</ThemedText>
         <View style={styles.photoWrapper}>
           {imageUrl ? (
-            <Image source={{ uri: imageUrl }} style={styles.photoPreview} contentFit="cover" />
+            <Image source={{ uri: resolveImageUrl(imageUrl) }} style={styles.photoPreview} contentFit="cover" />
           ) : (
             <View style={[styles.photoPreview, styles.photoPlaceholder, { borderColor: AdminColors.border }]}>
               <Ionicons name="image-outline" size={26} color={AdminColors.muted} />

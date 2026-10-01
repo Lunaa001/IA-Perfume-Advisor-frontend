@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AdminProduct, categoryLabel, fetchPerfumeById, genderLabel } from '@/lib/admin-products';
+import { resolveImageUrl } from '@/lib/api';
 
 // Mismo azul marino que el botón "Ingresar" del login.
 const CATALOG_ACCENT = '#192637';
@@ -94,7 +95,7 @@ export default function ProductDetailScreen() {
         <>
           <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
             {product.imageUrl ? (
-              <Image source={{ uri: product.imageUrl }} style={styles.image} contentFit="cover" />
+              <Image source={{ uri: resolveImageUrl(product.imageUrl) }} style={styles.image} contentFit="cover" />
             ) : (
               <View style={[styles.image, styles.imagePlaceholder, { backgroundColor: colors.card }]}>
                 <Ionicons name="flask-outline" size={40} color={colors.muted} />
