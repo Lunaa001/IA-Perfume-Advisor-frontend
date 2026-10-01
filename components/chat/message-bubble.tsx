@@ -32,10 +32,10 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
               usa una tarjeta sólida (colors.card) para diferenciarlas a simple vista. */}
           {isUser && (
             <>
-              <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+              <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
               <View
                 style={[
-                  StyleSheet.absoluteFillObject,
+                  StyleSheet.absoluteFill,
                   { backgroundColor: colors.bubbleSurfaceOverlay },
                 ]}
               />

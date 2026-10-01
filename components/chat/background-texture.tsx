@@ -9,7 +9,7 @@ type Props = {
 // pesar como una imagen; se reusa en chat, catálogo, carrito y admin con distintos colores.
 export function BackgroundTexture({ color }: Props) {
   return (
-    <Svg style={StyleSheet.absoluteFillObject} pointerEvents="none">
+    <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
       <Defs>
         <Pattern id="grain" width={16} height={16} patternUnits="userSpaceOnUse">
           <Circle cx={2} cy={2} r={1} fill={color} />

@@ -62,15 +62,15 @@ export default function ProductDetailScreen() {
     <View style={[styles.flex, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <Pressable hitSlop={10} onPress={() => router.back()} style={styles.headerButton}>
-          <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
+          <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
           <Ionicons name="arrow-back" size={20} color={colors.onBubbleSurface} />
         </Pressable>
 
         {product && (
           <Pressable hitSlop={10} onPress={() => toggleFavorite(product.id)} style={styles.headerButton}>
-            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
-            <View style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
             <Ionicons
               name={favorite ? 'heart' : 'heart-outline'}
               size={19}

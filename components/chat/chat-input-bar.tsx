@@ -24,9 +24,9 @@ export function ChatInputBar({ value, onChangeText, onSend, onFocus }: Props) {
   return (
     <View style={[styles.inputRow, { paddingBottom: insets.bottom + 10 }]}>
       <View style={[styles.inputContainer, { borderColor: `${colors.onBubbleSurface}1A` }]}>
-        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
         <View
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+          style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
         />
         <TextInput
           value={value}

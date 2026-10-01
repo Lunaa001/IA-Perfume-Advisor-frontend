@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   uploadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',

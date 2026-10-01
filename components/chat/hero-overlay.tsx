@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
 import { BackgroundTexture } from './background-texture';
@@ -13,7 +13,7 @@ type Props = {
 // Degradado oscuro sobre el fondo del hero para que el header y el texto se lean bien
 // encima de la imagen/textura; se desvanece cuando arranca la conversación (fadingOut).
 export function HeroOverlay({ fadingOut, intensity = 1 }: Props) {
-  const opacity = useRef(new Animated.Value(1)).current;
+  const [opacity] = useState(() => new Animated.Value(1));
   const alpha = (base: number) => base * intensity;
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function HeroOverlay({ fadingOut, intensity = 1 }: Props) {
   }, [fadingOut, opacity]);
 
   return (
-    <Animated.View style={[StyleSheet.absoluteFillObject, { opacity }]} pointerEvents="none">
+    <Animated.View style={[StyleSheet.absoluteFill, { opacity }]} pointerEvents="none">
       <LinearGradient
         colors={[
           `rgba(8,8,8,${alpha(0.92)})`,
@@ -37,7 +37,7 @@ export function HeroOverlay({ fadingOut, intensity = 1 }: Props) {
           'transparent',
         ]}
         locations={[0, 0.25, 0.5, 0.75, 1]}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
       />
       <BackgroundTexture color="rgba(255,255,255,0.07)" />
     </Animated.View>

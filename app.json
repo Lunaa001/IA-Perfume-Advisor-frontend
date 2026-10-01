@@ -46,7 +46,9 @@
         {
           "photosPermission": "Se usa para elegir la foto de un producto desde tu galería."
         }
-      ]
+      ],
+      "expo-image",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,

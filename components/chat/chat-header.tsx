@@ -29,9 +29,9 @@ export function ChatHeader() {
         hitSlop={8}
         onPress={() => router.push('/login')}
         style={styles.pillBubble}>
-        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
         <View
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+          style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
         />
         <Ionicons name="person-outline" size={16} color={colors.onBubbleSurface} />
         <ThemedText style={[styles.pillText, { color: colors.onBubbleSurface }]}>
@@ -45,9 +45,9 @@ export function ChatHeader() {
             hitSlop={8}
             onPress={() => router.push('/catalog/favorites')}
             style={styles.cartBubble}>
-            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View
-              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+              style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
             />
             <Ionicons name="heart-outline" size={18} color={colors.onBubbleSurface} />
           </Pressable>
@@ -66,9 +66,9 @@ export function ChatHeader() {
             hitSlop={8}
             onPress={() => router.push('/cart')}
             style={styles.cartBubble}>
-            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View
-              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+              style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
             />
             <Ionicons name="cart-outline" size={19} color={colors.onBubbleSurface} />
           </Pressable>

@@ -93,9 +93,9 @@ export default function LoginScreen() {
         hitSlop={8}
         onPress={() => router.back()}
         style={[styles.closeButton, { top: insets.top + 8 }]}>
-        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
         <View
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+          style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
         />
         <Ionicons name="close" size={20} color={colors.onBubbleSurface} />
       </Pressable>

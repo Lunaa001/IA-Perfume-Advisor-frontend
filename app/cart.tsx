@@ -67,9 +67,9 @@ export default function CartScreen() {
         hitSlop={8}
         onPress={() => router.back()}
         style={[styles.closeButton, { top: insets.top + 8 }]}>
-        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+        <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
         <View
-          style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+          style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
         />
         <Ionicons name="close" size={20} color={colors.onBubbleSurface} />
       </Pressable>
@@ -97,9 +97,9 @@ export default function CartScreen() {
           <Ionicons name="cart-outline" size={32} color={colors.muted} />
           <ThemedText style={[styles.emptyText, { color: colors.muted }]}>Tu carrito está vacío.</ThemedText>
           <Pressable onPress={() => router.back()} style={styles.emptyButton}>
-            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View
-              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+              style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
             />
             <ThemedText style={{ color: colors.onBubbleSurface, fontWeight: '600' }}>
               Ver perfumes
@@ -126,9 +126,9 @@ export default function CartScreen() {
       {items.length > 0 && (
         <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
           <View style={styles.footerCard}>
-            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+            <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View
-              style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+              style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
             />
             <View style={styles.totalRow}>
               <ThemedText style={[styles.totalLabel, { color: colors.onBubbleSurfaceMuted }]}>

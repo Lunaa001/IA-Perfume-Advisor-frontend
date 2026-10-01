@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 // Marca de agua del logo detrás del hero. Solo anima en un sentido (aparece visible
 // y se apaga una vez); no vuelve a mostrarse aunque "fadingOut" pase a false después.
 export function HeroLogo({ fadingOut }: Props) {
-  const opacity = useRef(new Animated.Value(1)).current;
+  const [opacity] = useState(() => new Animated.Value(1));
 
   useEffect(() => {
     if (!fadingOut) return;
@@ -34,7 +34,7 @@ export function HeroLogo({ fadingOut }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 70,

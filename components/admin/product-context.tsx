@@ -39,7 +39,10 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Carga inicial del catalogo al montar: el estado ya arranca en "cargando" (useState(true)
+  // arriba), no hay cascada real.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh();
   }, [refresh]);
 

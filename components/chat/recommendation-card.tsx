@@ -42,9 +42,9 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
 
   return (
     <View style={styles.card}>
-      <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
+      <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
       <View
-        style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]}
+        style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
       />
 
       <Pressable

@@ -22,8 +22,8 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: Props) {
 
   return (
     <View style={styles.card}>
-      <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFillObject} />
-      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
+      <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
 
       {item.imageUrl ? (
         <Image source={{ uri: resolveImageUrl(item.imageUrl) }} style={styles.thumb} contentFit="cover" />
