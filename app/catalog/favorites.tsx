@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; //pantalla favoritos
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native';
@@ -63,6 +63,7 @@ export default function FavoritesScreen() {
       <BackgroundTexture color={colors.texture} />
 
       <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: colors.border }]}>
+        {/* Botón volver */}
         <Pressable hitSlop={10} onPress={() => router.back()} style={styles.iconButton}>
           <Ionicons name="arrow-back" size={20} color={colors.text} />
         </Pressable>
@@ -92,6 +93,7 @@ export default function FavoritesScreen() {
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
+            // Botones ❤️ y ➕ de cada fila: components/favorites/favorite-item-row.tsx
             <FavoriteItemRow product={item} onAdd={() => handleAdd(item)} adding={addingId === item.id} />
           )}
           ListEmptyComponent={

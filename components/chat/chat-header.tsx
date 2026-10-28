@@ -25,6 +25,7 @@ export function ChatHeader() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
+      {/* Botón iniciar sesión */}
       <Pressable
         hitSlop={8}
         onPress={() => router.push('/login')}
@@ -41,6 +42,7 @@ export function ChatHeader() {
 
       <View style={styles.actionsRow}>
         <View style={styles.cartWrapper}>
+          {/* Botón favoritos */}
           <Pressable
             hitSlop={8}
             onPress={() => router.push('/catalog/favorites')}
@@ -62,6 +64,7 @@ export function ChatHeader() {
         </View>
 
         <View style={styles.cartWrapper}>
+          {/* Botón carrito */}
           <Pressable
             hitSlop={8}
             onPress={() => router.push('/cart')}

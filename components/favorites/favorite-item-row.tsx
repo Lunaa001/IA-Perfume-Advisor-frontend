@@ -31,6 +31,7 @@ export function FavoriteItemRow({ product, onAdd, adding }: Props) {
   const stock = stockMeta(product);
 
   return (
+    // Botón: toda la fila (abre el detalle)
     <Pressable
       onPress={() => router.push({ pathname: '/catalog/[id]', params: { id: product.id } })}
       style={[styles.row, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -62,9 +63,11 @@ export function FavoriteItemRow({ product, onAdd, adding }: Props) {
       </View>
 
       <View style={styles.actions}>
+        {/* Botón quitar de favoritos */}
         <Pressable onPress={() => toggleFavorite(product.id)} hitSlop={8} style={styles.heartButton}>
           <Ionicons name="heart" size={18} color="#E14B4B" />
         </Pressable>
+        {/* Botón ➕ → app/catalog/favorites.tsx (handleAdd) */}
         <Pressable
           onPress={onAdd}
           disabled={unavailable || adding}

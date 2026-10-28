@@ -38,6 +38,7 @@ export function CatalogProductCard({ product, onAdd, adding }: Props) {
   const stock = stockMeta(product);
 
   return (
+    // Botón: toda la tarjeta (abre el detalle)
     <Pressable
       onPress={() => router.push({ pathname: '/catalog/[id]', params: { id: product.id } })}
       style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -49,6 +50,7 @@ export function CatalogProductCard({ product, onAdd, adding }: Props) {
             <Ionicons name="flask-outline" size={24} color={colors.muted} />
           </View>
         )}
+        {/* Botón favorito */}
         <Pressable
           onPress={() => toggleFavorite(product.id)}
           hitSlop={8}
@@ -80,6 +82,7 @@ export function CatalogProductCard({ product, onAdd, adding }: Props) {
           <ThemedText style={[styles.price, { color: CATALOG_ACCENT }]} numberOfLines={1}>
             {formatARS(product.price)}
           </ThemedText>
+          {/* Botón ➕ → app/catalog/index.tsx (handleAdd) */}
           <Pressable
             onPress={onAdd}
             disabled={unavailable || adding}

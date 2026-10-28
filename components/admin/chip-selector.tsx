@@ -20,6 +20,7 @@ export function ChipSelector<T extends string>({ options, value, onChange }: Pro
         const selected = option.value === value;
         const activeColor = option.color ?? AdminColors.accent;
         return (
+          // Botón: cada chip (elige una opción)
           <Pressable
             key={option.value}
             onPress={() => onChange(option.value)}

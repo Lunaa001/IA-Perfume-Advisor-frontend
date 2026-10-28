@@ -89,6 +89,7 @@ export default function LoginScreen() {
       <TopFade />
       <HeroOverlay fadingOut={false} intensity={0.5} />
 
+      {/* Botón cerrar */}
       <Pressable
         hitSlop={8}
         onPress={() => router.back()}
@@ -138,6 +139,7 @@ export default function LoginScreen() {
               secureTextEntry={!showPassword}
               style={styles.passwordInput}
             />
+            {/* Botón mostrar / ocultar contraseña */}
             <Pressable hitSlop={8} onPress={() => setShowPassword((prev) => !prev)}>
               <Ionicons
                 name={showPassword ? 'eye-off-outline' : 'eye-outline'}
@@ -151,6 +153,7 @@ export default function LoginScreen() {
             <ThemedText style={styles.errorText}>{error}</ThemedText>
           )}
 
+          {/* Botón ingresar (handleSubmit) */}
           <Pressable
             onPress={handleSubmit}
             disabled={!canSubmit}

@@ -52,6 +52,7 @@ export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRe
                   borderColor: selected ? AdminColors.accent : AdminColors.border,
                 },
               ]}>
+              {/* Botón elegir / sacar categoría */}
               <Pressable onPress={() => onToggle(option.value)} style={styles.chipBody} hitSlop={4}>
                 {selected && <Ionicons name="checkmark" size={13} color="#FFFFFF" style={styles.check} />}
                 <ThemedText
@@ -59,6 +60,7 @@ export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRe
                   {option.label}
                 </ThemedText>
               </Pressable>
+              {/* Botón ✕ quitar categoría */}
               <Pressable onPress={() => handleRemove(option)} hitSlop={8} style={styles.removeButton}>
                 <Ionicons
                   name="close"
@@ -71,6 +73,7 @@ export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRe
         })}
 
         {!adding && (
+          // Botón + Agregar categoría
           <Pressable
             onPress={() => setAdding(true)}
             style={[styles.chip, styles.addChip, { borderColor: AdminColors.border }]}>
@@ -96,9 +99,11 @@ export function MultiChipSelector({ options, values, onToggle, onAddCustom, onRe
               { backgroundColor: AdminColors.surface, borderColor: AdminColors.border, color: AdminColors.text },
             ]}
           />
+          {/* Botón ✓ confirmar categoría nueva */}
           <Pressable onPress={confirmAdd} style={[styles.confirmButton, { backgroundColor: AdminColors.accent }]}>
             <Ionicons name="checkmark" size={18} color="#FFFFFF" />
           </Pressable>
+          {/* Botón ✕ cancelar */}
           <Pressable
             onPress={() => {
               setAdding(false);

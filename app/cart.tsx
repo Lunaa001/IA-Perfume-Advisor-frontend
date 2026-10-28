@@ -26,7 +26,7 @@ export default function CartScreen() {
     useCart();
   const [checkingOut, setCheckingOut] = useState(false);
 
-  const handleRemove = (perfumeId: number, name: string) => {
+  const handleRemove = (perfumeId: number, name: string) => { 
     Alert.alert('Quitar producto', `¿Sacar "${name}" del carrito?`, [
       { text: 'Cancelar', style: 'cancel' },
       {
@@ -63,6 +63,7 @@ export default function CartScreen() {
     <View style={[styles.flex, { backgroundColor: CATALOG_BACKGROUND }]}>
       <BackgroundTexture color={colors.texture} />
 
+      {/* Botón cerrar carrito */}
       <Pressable
         hitSlop={8}
         onPress={() => router.back()}
@@ -96,6 +97,7 @@ export default function CartScreen() {
         <View style={styles.empty}>
           <Ionicons name="cart-outline" size={32} color={colors.muted} />
           <ThemedText style={[styles.emptyText, { color: colors.muted }]}>Tu carrito está vacío.</ThemedText>
+          {/* Botón ver perfumes (carrito vacío) */}
           <Pressable onPress={() => router.back()} style={styles.emptyButton}>
             <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View
@@ -113,6 +115,7 @@ export default function CartScreen() {
           contentContainerStyle={styles.list}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
+            // Botones −, + y tacho: components/cart/cart-item-row.tsx
             <CartItemRow
               item={item}
               onIncrease={() => increase(item.perfumeId)}
@@ -138,6 +141,7 @@ export default function CartScreen() {
                 {formatARS(totalPrice)}
               </ThemedText>
             </View>
+            {/* Botón pedir por WhatsApp (handleCheckout) */}
             <Pressable
               onPress={handleCheckout}
               disabled={checkingOut}

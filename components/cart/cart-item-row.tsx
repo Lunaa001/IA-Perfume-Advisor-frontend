@@ -43,12 +43,14 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: Props) {
 
         <View style={styles.bottomRow}>
           <View style={[styles.stepper, { borderColor: `${colors.onBubbleSurface}1A` }]}>
+            {/* Botón − (restar) */}
             <Pressable hitSlop={8} onPress={onDecrease} style={styles.stepperButton}>
               <Ionicons name="remove" size={14} color={colors.onBubbleSurface} />
             </Pressable>
             <ThemedText style={[styles.stepperValue, { color: colors.onBubbleSurface }]}>
               {item.quantity}
             </ThemedText>
+            {/* Botón + (sumar) */}
             <Pressable hitSlop={8} onPress={onIncrease} style={styles.stepperButton}>
               <Ionicons name="add" size={14} color={colors.onBubbleSurface} />
             </Pressable>
@@ -60,6 +62,7 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: Props) {
         </View>
       </View>
 
+      {/* Botón quitar → app/cart.tsx (handleRemove) */}
       <Pressable hitSlop={10} onPress={onRemove} style={styles.removeButton}>
         <Ionicons name="trash-outline" size={17} color={colors.onBubbleSurfaceMuted} />
       </Pressable>
