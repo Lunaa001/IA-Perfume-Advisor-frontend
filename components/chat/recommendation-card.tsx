@@ -47,6 +47,7 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
         style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]}
       />
 
+      {/* Botón favorito */}
       <Pressable
         onPress={() => toggleFavorite(item.perfumeId)}
         hitSlop={8}
@@ -89,6 +90,7 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
         />
       )}
 
+      {/* Botón agregar al carrito (handleAdd) */}
       <Pressable
         onPress={handleAdd}
         disabled={status !== 'idle'}

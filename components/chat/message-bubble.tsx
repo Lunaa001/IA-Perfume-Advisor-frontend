@@ -52,6 +52,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
         ))}
 
         {message.cta && (
+          // Botón Ver catálogo
           <Pressable
             onPress={() => router.push(message.cta!.href)}
             style={[styles.ctaButton, { backgroundColor: colors.onBubbleSurface }]}>

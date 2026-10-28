@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; //carga producto
 import * as DocumentPicker from 'expo-document-picker';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -198,6 +198,7 @@ export default function ProductFormScreen() {
       <BackgroundTexture color={AdminColors.editTexture} />
 
       <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: AdminColors.border }]}>
+        {/* Botón cerrar sin guardar */}
         <Pressable hitSlop={10} onPress={() => router.back()} style={styles.iconButton}>
           <Ionicons name="close" size={22} color={AdminColors.text} />
         </Pressable>
@@ -233,6 +234,7 @@ export default function ProductFormScreen() {
         </View>
 
         <View style={styles.pickerRow}>
+          {/* Botón galería */}
           <Pressable
             onPress={handlePickFromGallery}
             disabled={uploadingImage}
@@ -240,6 +242,7 @@ export default function ProductFormScreen() {
             <Ionicons name="images-outline" size={16} color={AdminColors.text} />
             <ThemedText style={[styles.pickerButtonText, { color: AdminColors.text }]}>Galería</ThemedText>
           </Pressable>
+          {/* Botón archivo */}
           <Pressable
             onPress={handlePickFromFiles}
             disabled={uploadingImage}
@@ -319,6 +322,7 @@ export default function ProductFormScreen() {
         </View>
 
         <ThemedText style={[styles.label, { color: AdminColors.muted }]}>Categorías</ThemedText>
+        {/* Botones de categorías: components/admin/multi-chip-selector.tsx */}
         <MultiChipSelector
           options={categoryOptions}
           values={categories}
@@ -328,11 +332,14 @@ export default function ProductFormScreen() {
         />
 
         <ThemedText style={[styles.label, { color: AdminColors.muted, marginTop: 16 }]}>Género</ThemedText>
+        {/* Botones de género: components/admin/chip-selector.tsx */}
         <ChipSelector options={GENDER_OPTIONS} value={genderType} onChange={setGenderType} />
 
         <ThemedText style={[styles.label, { color: AdminColors.muted, marginTop: 14 }]}>Estado</ThemedText>
+        {/* Botones de estado: components/admin/chip-selector.tsx */}
         <ChipSelector options={STATUS_OPTIONS} value={status} onChange={setStatus} />
 
+        {/* Botón crear producto / guardar cambios (handleSubmit) */}
         <Pressable
           onPress={handleSubmit}
           disabled={!canSubmit}
@@ -347,6 +354,7 @@ export default function ProductFormScreen() {
         </Pressable>
 
         {isEditing && (
+          // Botón eliminar producto (solo al editar)
           <Pressable onPress={handleDelete} style={styles.deleteButton}>
             <ThemedText style={styles.deleteText}>Eliminar producto</ThemedText>
           </Pressable>

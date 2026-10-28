@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; //lista
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, TextInput, View } from 'react-native';
@@ -29,7 +29,7 @@ export default function AdminDashboardScreen() {
     );
   }, [products, search]);
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = (id: string, name: string) => { //borrar
     Alert.alert('Eliminar producto', `¿Seguro que querés eliminar "${name}"?`, [
       { text: 'Cancelar', style: 'cancel' },
       {
@@ -58,6 +58,7 @@ export default function AdminDashboardScreen() {
       <BackgroundTexture color={AdminColors.texture} />
 
       <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: AdminColors.border }]}>
+        {/* Botón volver al chat */}
         <Pressable hitSlop={10} onPress={() => router.replace('/')} style={styles.iconButton}>
           <Ionicons name="arrow-back" size={22} color={AdminColors.text} />
         </Pressable>
@@ -67,6 +68,7 @@ export default function AdminDashboardScreen() {
             {products.length} {products.length === 1 ? 'producto' : 'productos'}
           </ThemedText>
         </View>
+        {/* Botón salir (cerrar sesión) */}
         <Pressable hitSlop={10} onPress={handleLogout} style={styles.iconButton}>
           <Ionicons name="log-out-outline" size={22} color={AdminColors.text} />
         </Pressable>
@@ -75,6 +77,7 @@ export default function AdminDashboardScreen() {
       {error && (
         <View style={styles.errorBanner}>
           <ThemedText style={styles.errorText}>{error}</ThemedText>
+          {/* Botón reintentar */}
           <Pressable onPress={refresh}>
             <ThemedText style={styles.retryText}>Reintentar</ThemedText>
           </Pressable>
@@ -94,6 +97,7 @@ export default function AdminDashboardScreen() {
         </View>
 
         {/* Además de limpiar el texto, reabre el listado por si el admin lo había colapsado. */}
+        {/* Botón limpiar búsqueda */}
         <Pressable
           hitSlop={8}
           onPress={() => {
@@ -105,6 +109,7 @@ export default function AdminDashboardScreen() {
         </Pressable>
       </View>
 
+      {/* Botón ocultar / mostrar listado */}
       <Pressable onPress={() => setListVisible((prev) => !prev)} style={styles.toggleRow} hitSlop={6}>
         <ThemedText style={[styles.toggleText, { color: AdminColors.muted }]}>
           {listVisible ? 'Ocultar listado' : 'Mostrar listado'}
@@ -116,7 +121,7 @@ export default function AdminDashboardScreen() {
         />
       </Pressable>
 
-      {listVisible && (
+      {listVisible && ( //lista
         <FlatList
           data={filtered}
           keyExtractor={(item) => item.id}
@@ -126,6 +131,7 @@ export default function AdminDashboardScreen() {
             <RefreshControl refreshing={isLoading} onRefresh={refresh} tintColor={AdminColors.text} />
           }
           renderItem={({ item }) => (
+            // Cada producto: tocar = editar, tacho = borrar (handleDelete)
             <ProductCard
               product={item}
               onPress={() => router.push({ pathname: '/admin/product-form', params: { id: item.id } })}
@@ -149,6 +155,7 @@ export default function AdminDashboardScreen() {
         />
       )}
 
+      {/* Botón ➕ crear producto */}
       <Pressable
         onPress={() => router.push('/admin/product-form')}
         style={[styles.fab, { backgroundColor: AdminColors.accent, bottom: insets.bottom + 20 }]}>

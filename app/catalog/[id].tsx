@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; //ficha perfume
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -61,6 +61,7 @@ export default function ProductDetailScreen() {
   return (
     <View style={[styles.flex, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+        {/* Botón volver */}
         <Pressable hitSlop={10} onPress={() => router.back()} style={styles.headerButton}>
           <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
           <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
@@ -68,6 +69,7 @@ export default function ProductDetailScreen() {
         </Pressable>
 
         {product && (
+          // Botón favorito
           <Pressable hitSlop={10} onPress={() => toggleFavorite(product.id)} style={styles.headerButton}>
             <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
             <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
@@ -143,6 +145,7 @@ export default function ProductDetailScreen() {
           </ScrollView>
 
           <View style={[styles.footer, { paddingBottom: insets.bottom + 16, backgroundColor: colors.background, borderColor: colors.border }]}>
+            {/* Botón agregar al carrito (handleAdd) */}
             <Pressable
               onPress={handleAdd}
               disabled={unavailable || addStatus !== 'idle'}

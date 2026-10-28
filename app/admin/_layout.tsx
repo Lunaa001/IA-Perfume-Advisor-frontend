@@ -5,13 +5,11 @@ import { useAuth } from '@/components/auth/auth-context';
 import { ProductsProvider } from '@/components/admin/product-context';
 import { Colors } from '@/constants/theme';
 
-// Guardia de acceso: mientras se resuelve la sesión mostramos un loader, y si quien
-// entra no es admin lo mandamos al login. ProductsProvider se monta recién acá para no
-// pedir el catálogo de admin a nadie que no haya pasado el chequeo.
+// Guardia de acceso
 export default function AdminLayout() {
   const { isAdmin, isLoading } = useAuth();
 
-  if (isLoading) {
+  if (isLoading) {  //no 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.light.background }}>
         <ActivityIndicator color={Colors.light.tint} />
@@ -20,10 +18,10 @@ export default function AdminLayout() {
   }
 
   if (!isAdmin) {
-    return <Redirect href="/login" />;
+    return <Redirect href="/login" />; //login
   }
 
-  return (
+  return ( //si
     <ProductsProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />

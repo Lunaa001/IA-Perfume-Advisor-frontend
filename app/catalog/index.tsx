@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; //pantalla catálogo
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -90,6 +90,7 @@ export default function CatalogScreen() {
       <BackgroundTexture color={colors.texture} />
 
       <View style={[styles.header, { paddingTop: insets.top + 12, borderColor: colors.border }]}>
+        {/* Botón volver al chat */}
         <Pressable hitSlop={10} onPress={() => router.back()} style={styles.iconButton}>
           <Ionicons name="chatbubble-ellipses-outline" size={20} color={colors.text} />
         </Pressable>
@@ -102,6 +103,7 @@ export default function CatalogScreen() {
 
         <View style={styles.actionsRow}>
           <View style={styles.cartWrapper}>
+            {/* Botón favoritos */}
             <Pressable hitSlop={10} onPress={() => router.push('/catalog/favorites')} style={styles.cartButton}>
               <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
               <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
@@ -117,6 +119,7 @@ export default function CatalogScreen() {
           </View>
 
           <View style={styles.cartWrapper}>
+            {/* Botón carrito */}
             <Pressable hitSlop={10} onPress={() => router.push('/cart')} style={styles.cartButton}>
               <BlurView intensity={38} tint="light" style={StyleSheet.absoluteFill} />
               <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.bubbleSurfaceOverlay }]} />
@@ -131,7 +134,8 @@ export default function CatalogScreen() {
         </View>
       </View>
 
-      <Pressable onPress={() => router.back()} style={styles.advisorRow} hitSlop={6}>
+      {/* Botón volver al asesor IA */}
+      <Pressable onPress={() => router.back()} style={styles.advisorRow} hitSlop={6}>  
         <Ionicons name="sparkles-outline" size={13} color={CATALOG_ACCENT} />
         <ThemedText style={[styles.advisorText, { color: CATALOG_ACCENT }]}>
           Volver a hablar con el asesor IA
@@ -140,6 +144,7 @@ export default function CatalogScreen() {
 
       <View style={[styles.searchBar, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Ionicons name="search" size={16} color={colors.muted} />
+        {/* Buscador */}
         <TextInput
           value={search}
           onChangeText={setSearch}
@@ -149,6 +154,7 @@ export default function CatalogScreen() {
         />
       </View>
 
+      {/* Botón abrir / cerrar filtros */}
       <Pressable onPress={() => setFiltersOpen((prev) => !prev)} style={styles.filterHeader} hitSlop={6}>
         <ThemedText style={[styles.filterLabel, { color: colors.muted }]}>
           Filtrar{activeFilter ? `: ${activeFilter.label}` : ''}
@@ -162,6 +168,7 @@ export default function CatalogScreen() {
 
       {filtersOpen && (
         <View style={styles.filtersWrap}>
+          {/* Chip Todos (saca el filtro) */}
           <Pressable
             onPress={() => setActiveFilter(null)}
             style={[
@@ -178,6 +185,7 @@ export default function CatalogScreen() {
           {FILTER_OPTIONS.map((option) => {
             const selected = activeFilter?.value === option.value;
             return (
+              // Chips de filtro (Mujer, Hombre, Unisex...)
               <Pressable
                 key={option.value}
                 onPress={() => setActiveFilter(selected ? null : option)}
@@ -213,6 +221,7 @@ export default function CatalogScreen() {
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           renderItem={({ item }) => (
+            // Botones de cada tarjeta: components/catalog/catalog-product-card.tsx
             <CatalogProductCard product={item} onAdd={() => handleAdd(item)} adding={addingId === item.id} />
           )}
           ListEmptyComponent={

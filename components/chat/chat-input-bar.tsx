@@ -37,6 +37,7 @@ export function ChatInputBar({ value, onChangeText, onSend, onFocus }: Props) {
           style={[styles.input, { color: colors.onBubbleSurface }]}
           multiline
         />
+        {/* Botón enviar → app/index.tsx (handleSend) */}
         <Pressable
           onPress={onSend}
           disabled={!canSend}

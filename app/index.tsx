@@ -79,7 +79,7 @@ export default function ChatScreen() {
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  const handleSend = async () => {
+  const handleSend = async () => { //enviar
     const trimmed = input.trim();
     if (!trimmed) return;
 
@@ -134,6 +134,7 @@ export default function ChatScreen() {
       <BackgroundTexture color={textureColor} />
       <TopFade />
       <HeroOverlay fadingOut={hasUserMessaged} />
+      {/* Barra de arriba (botones): components/chat/chat-header.tsx */}
       <ChatHeader />
 
       <View style={[styles.flex, hasUserMessaged && { marginTop: headerClearance }]}>
@@ -151,6 +152,7 @@ export default function ChatScreen() {
         />
       </View>
 
+      {/* Barra de abajo (botón enviar → handleSend) */}
       <ChatInputBar
         value={input}
         onChangeText={setInput}

@@ -17,6 +17,7 @@ type Props = {
 
 export function ProductCard({ product, onPress, onDelete }: Props) {
   return (
+    // Botón: toda la tarjeta (editar) → app/admin/index.tsx
     <Pressable
       onPress={onPress}
       style={[styles.card, { backgroundColor: AdminColors.surface, borderColor: AdminColors.border }]}>
@@ -46,6 +47,7 @@ export function ProductCard({ product, onPress, onDelete }: Props) {
         <StatusBadge status={product.status} />
       </View>
 
+      {/* Botón borrar → app/admin/index.tsx (handleDelete) */}
       <Pressable hitSlop={10} onPress={onDelete} style={styles.deleteButton}>
         <Ionicons name="trash-outline" size={18} color="#C97A3D" />
       </Pressable>
